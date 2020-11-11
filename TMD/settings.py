@@ -21,7 +21,12 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
 # ==================Custom App======================
     'home',
-
+    'accounts',
+    'administrator',
+    
+   'administrator.src.admin_group',
+   'administrator.src.admin_user',
+   'administrator.src.admin_contact',
 # ==================Built in App======================
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

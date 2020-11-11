@@ -1,0 +1,114 @@
+<!-- Header Area Starts -->
+{% load static %}
+<header>
+    <div class="blog-top">
+        <div class="top_menu row m-0">
+            <div class="container">
+                <div class="float-left">
+                    <ul class="list header_social">
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                    </ul>
+                </div>
+                <div class="float-right">
+                    <a class="dn_btn" href="tel:+4400123654896">+255 745 167 7978 </a>
+                    <a class="dn_btn" href="">cbunih@gmail.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-area blog-menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="logo-area">
+                        <a href="{% url 'home:welcome'%}"><img src="{% static 'assets/images/logo.png'%}"
+                                alt="logo"></a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="custom-navbar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="main-menu">
+                        <ul>
+                            <li class="active"><a href="{% url 'home:welcome' %}">home</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="">category</a></li>
+                            {% endif %}
+                            <!-- <li><a href="">bok</a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">Blog Home</a></li>
+                                    <li><a href="#">Blog Details</a></li>
+                                </ul>
+                            </li> -->
+                            <li><a href="">blog</a></li>
+                            <li><a href="">about us</a></li>
+
+                            <!-- <li><a href="#">pages</a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">Job Search</a></li>
+                                    <li><a href="#">Job Single</a></li>
+                                    <li><a href="#">Pricing Plan</a></li>
+                                    <li><a href="#">Elements</a></li>
+                                </ul>
+                            </li> -->
+                            {% if request.user.is_authenticated %}
+                            <li class="menu-btn"> <a href="#">
+                                    <img src="{{ user.profile.profile.url }}" alt="." width="40px"
+                                        style="border-radius: 50px;"> {{user}}
+                                    <i class="fa fa-toggle-down (alias)  "></i></a> <br>
+                                <ul class="sub-menu mt-2 ">
+                                    <li class="text-center">
+                                        <div>
+                                            <img class="  img-thumnail" src="{{ user.profile.profile.url }}" alt="."
+                                                width="40px" style="border-radius: 50px;"> <br>
+                                        </div><br>
+                                        <h6 style="text-transform: uppercase;">
+                                            {% if  user.groups.all.first %}
+                                            {{  user.groups.all.first }}
+                                            {% else %}
+                                            {{ user.first_name }}  {{ user.last_name }}
+                                            {% endif %}
+
+
+                                        </h6>
+
+                                    </li>
+                                    <hr>
+                                    <li><a href="{% url 'profile' %}" ><i class="fa fa-user"></i> Profile</a></li>
+                                    <!-- <li><a href="#"><i class="fa fa-bell"></i> Notifications</a></li> -->
+                                    <li><a href="{% url 'reset'%}"><i class="fa  fa-warning"></i> Change Password</a>
+                                    </li>
+                            {% if user.is_superuser %}
+
+                                    <li><a href="/admin" style="color: red;"><i class="fa fa-superpowers "></i> 
+                                            SUPER<strong>ADMIN</strong> PANEL</a></li>
+                                    <li><a href="/administrator" style="color: red;"><i
+                            
+                                                class="fa fa-bullseye"></i> ADMINISTRATOR PANEL</a></li>
+                                                {% endif %}
+                                    <li><a href="{% url 'logout' %}"><i class="fa  fa-power-off"></i> logout</a></li>
+                                
+                                
+                                </ul>
+                            </li>
+
+                            {% else %}
+                            <li class="menu-btn">
+                                <a href="{% url 'login'%}" class="login">log in</a>
+                                <a href="{% url 'register'%}" class="template-btn">sign up</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

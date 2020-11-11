@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html'%}
+
+{% block content %}
+<div class="page-wrapper flex-row align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-md-offset-3">
+    
+                    <div class="card p-4">
+                        <div class="card-header text-center text-uppercase h4 font-weight-light">
+                            RESET PASSWORD 
+                        </div>
+                        {% include 'layouts/partials/inc/msg.html' %}
+    
+    
+                        <form action="{% url 'reset' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="card-body py-5">
+                                <div class="form-group">
+                                    <!-- <label class="form-control-label">Old Password <span style="color:red">*</span></label> -->
+                                    <input type="password" class="form-control" name="old" placeholder="Enter currently Password " required>
+                                </div>
+                                <div class="form-group">
+                                    <!-- <label class="form-control-label">New Password <span style="color:red">*</span></label> -->
+                                    <input type="password" class="form-control" name="new" placeholder="Enter New Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <!-- <label class="form-control-label">Confirm New Password <span style="color:red">*</span></label> -->
+                                    <input type="password" class="form-control" name="confirm" placeholder="confirm New Password"  required>
+                                </div>
+    
+                              
+                            </div>
+    
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-primary px-5">Reset</button>
+                                    </div>
+    
+                                </div>
+                            </div>
+                        </form>
+    
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock  %}

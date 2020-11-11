@@ -1,0 +1,242 @@
+{% extends 'admin_layouts/administrator.html'%}
+{% load static %}
+{% block title %} administrator | icaretechnology {% endblock%}
+{% block content %}
+
+<div class="container">
+
+
+
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Group Panel </h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Group</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+  <!-- /.content-header -->
+    {% if  groups  %}
+
+    <div class="card">
+      <div class="card-header border-transparent">
+        <h3 class="card-title">Group Lists</h3>
+
+        <div class="card-tools" >
+          <!-- <button type="button" class="btn btn-tool" data-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button> -->
+            <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+            class="btn btn-sm btn-info float-right">Create Group</a>
+        
+        </div>
+
+
+
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Group ID</th>
+                <th>Group</th>
+                <th>Status</th>
+                <th>#Permissions</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for group in groups %}
+              <tr>
+                <td><a href="">{{ forloop.counter }}</a></td>
+                <td>{{ group.name }}</td>
+                <td><span class="badge badge-success">Active</span></td>
+                <td>
+                  <div class="sparkbar" data-color="#00a65a" data-height="20">{{ group.permissions.count }}</div>
+                </td>
+                <td>
+                  {% if group.name == 'administrator' or group.name == 'applicants' or group.name == 'managers'  %}
+                  <span title="No any action allowed" style="color: red;"> 
+                  <i class="fa fa-ban"></i>
+                  <i class="fa fa-ban"></i>
+                  <i class="fa fa-ban"></i>
+                    </span>
+                  {% else %}
+                  <a  title="Edit Group info" style="margin-right: 10px;" href="" data-toggle="modal"
+                    data-target="#editGroup{{ group.id }}" class="text-primary"> <i class="fa fa-edit"></i> </a>
+                  <a title="Grant Permission" style="margin-right: 10px;"
+                    href="{% url 'administrator:grant_access' group.id %}" class="text-primary"> <i
+                      class="fa fa-key"></i> </a>
+                  <a title="Delete Group " href="javascript:void(0)" data-toggle='modal' data-target="#deleteGroup{{ group.id }}"
+                    class="text-danger"> <i class="fa fa-trash"></i> </a>
+                  {% endif %}
+
+
+
+
+
+
+                      <!-- Create Modal -->
+              <div class="modal fade" id="deleteGroup{{ group.id }}" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    Delete Group
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{% url 'administrator:remove_group' group.id  %}">
+                      {% csrf_token %}
+                      <p>Are Your Sure? Delete <strong style="color: red;">{{ group.name }} Group</strong>?</p>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Group </button>
+                      </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- end Modal -->
+
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editGroup{{ group.id }}" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    Edit Group
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{% url 'administrator:update_group' group.id  %}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <input type="text" name="name" class="form-control" autofocus
+                          placeholder="Enter Your New group Name" value="{{ group.name }}">
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Update </button>
+                      </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- end Modal -->
+                </td>
+
+
+
+              </tr>
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+              {% endfor  %}
+
+
+
+            </tbody>
+          </table>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.card-body -->
+      <!-- <div class="card-footer clearfix">
+        <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-left">View Inactive Group</a>
+        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+          class="btn btn-sm btn-info float-right">Create Group</a>
+      </div> -->
+
+
+
+
+
+
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- /.card-footer -->
+</div>
+{% else %}
+<div class="jumbotron text-center text-info">
+  <h5> <i class="fa fa-exclamation-triangle"></i> No any Group Found</h5>
+  or <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"> Create Now</a>
+</div>
+{% endif %}
+</div>
+
+
+
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Create Group</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'administrator:group' %}" method="POST">
+        <div class="modal-body">
+
+          <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary btn-sm">Create And Permit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

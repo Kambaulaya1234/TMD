@@ -1,0 +1,336 @@
+{% load static %}
+{% load base %}
+  <!-- Main Sidebar Container -->
+  <!--  -->
+  <aside class=" main-sidebar elevation-4 sidebar-light-primary">
+   
+    <!-- Brand Logo -->
+    <a href="/administrator/" class="brand-link navbar-white">
+      <img src="{% static 'administrator/dist/img/logo.png' %}" alt="." class="brand-image img-circle "
+           style="opacity: .8" width="10px">
+      <span class="brand-text font-weight-light">TMD SYSTEM</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <!-- <img src="{{ user.profile.profile.url }}" class="img-circle " alt="."> -->
+        </div>
+        <div class="info">
+          <a href="#" class="d-block" style="text-transform: uppercase;">Welcome {{ user }}</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+
+               <!-- menu-open -->
+          <li class="nav-item has-treeview ">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'administrator:index' %}" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Admin Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Normal Dashboard</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+         
+         
+
+          <li class="nav-header">System</li>
+         
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fa fa-paw"></i>
+              <p>
+                Groups
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">{% group_count %}</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'administrator:group' %}" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Active lists </p>
+                </a>
+              </li>
+              <!-- <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Inactive Lists </p>
+                </a>
+              </li> -->
+            
+              
+             
+              
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-users"></i>
+              <p>
+                Users
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">{% user_count %}</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'administrator:user' %}" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Active Users</p>
+                </a>
+              </li>
+              <!-- <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Active Clients</p>
+                </a>
+              </li> -->
+              <!-- <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Inactive Users</p>
+                </a>
+              </li> -->
+             
+            </ul>
+          </li>
+
+          <li class="nav-header">Settings</li>
+
+          <!-- <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-microchip "></i>
+              <p>
+                Supervisor
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">11</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+             
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Manage Creteria</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Manage Company</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Manage Department</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Manage Category</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa  fa-bullhorn"></i>
+              <p>
+                Information
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">11</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+             
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Basic Information</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Education Information</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li> -->
+
+
+          <li class="nav-header">Management </li>
+         
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-folder-open"></i>
+              <p>
+                Share|Hisa|Kuku
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">12</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+             
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Active Job list</p>
+                </a>
+              </li>
+             
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">In Active Job list</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="" class="nav-link">
+              <i class="nav-icon fa fa-graduation-cap"></i>
+              <p>
+                Payment
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right"></span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+             
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Applicants list</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Selected list</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li>
+
+
+
+
+
+          <!-- <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fa fa-cubes"></i>
+              <p>
+                Shop
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">34</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Active Products</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Inactive Products</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li> -->
+
+<!-- 
+          <li class="nav-item">
+            <a href="" class="nav-link ">
+              <i class="nav-icon fa fa-cogs"></i>
+              <p>
+                Logs
+                <span class="right badge badge-primary">New</span>
+              </p>
+            </a>
+          </li> -->
+          <li class="nav-item">
+            <a href="" class="nav-link ">
+              <i class="nav-icon fa fa-envelope"></i>
+              <p>
+                Loan Information
+                <!-- <span class="right badge badge-primary">New</span> -->
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="" class="nav-link ">
+              <i class="nav-icon fa fa-thumbs-up"></i>
+              <p>
+                Reports
+                <!-- <span class="right badge badge-primary">New</span> -->
+              </p>
+            </a>
+          </li>
+
+          <!-- <li class="nav-header">Internal Management</li>
+         
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+              Manage Paid Products
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-circle text-primary"></i>
+                  <p class="text">Important</p>
+                </a>
+              </li>
+              
+            </ul>
+          </li> -->
+
+          <br><br>
+
+      
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+    
+  </aside>
+

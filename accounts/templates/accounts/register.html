@@ -1,0 +1,72 @@
+{% extends 'layouts/base.html ' %}
+{% load static %}
+{% block content %}
+
+     
+<div class="container">
+    <div class="page-wrapper align-items-center">
+            <div class="row justify-content-center" >
+                <div class="col-md-6" style="margin-left: 300px;">
+                    <div class="card" style="border: 1px solid #466777;padding:5px 40px;border-radius:50px">
+
+                      
+                        <div class="card-header text-center text-uppercase ">
+                            <img src="{% static 'images/brand.jpg' %}" alt="." width="100px"> <br>
+                            Register
+                            
+                        </div>
+                        <br>
+                    {% include 'layouts/partials/inc/msg.html' %}
+
+    
+                        <div >
+                            <form action="{% url 'register' %}" method="POST">
+                                {% csrf_token %}
+                                    <div class="card-body ">
+                                           
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="fname" placeholder="Your Fist name" style="border-radius: 20px;" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="lname" placeholder="Your Last name here"  style="border-radius: 20px;" required>
+                                            </div>
+                                            <div class="form-group">
+                                                    <select name="gender" id="gender" class="form-control"  style="border-radius: 20px;"  required >
+                                                            <option selected disabled >[ SELECT GENDER ]</option>
+                                                            <option value="1">MALE</option>
+                                                            <option value="2">FEMALE</option>
+        
+                                                    </select>
+                                                </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="username" placeholder="Your Username here.."  style="border-radius: 20px;" required>
+                                            </div>
+                    
+                                            <div class="form-group">
+                                                <input type="email" class="form-control"  placeholder="Your email here.."  name="email"  style="border-radius: 20px;" required > 
+                                            </div>
+                    
+                                            <div class="form-group">
+                                                <input type="password" class="form-control" name="password"  placeholder="Your password here.."  style="border-radius: 20px;" required>
+                                            </div>
+                    
+                                            <div class="form-group">
+                                                <input type="password" class="form-control" name="cpassword"  placeholder=" Retye password here.."  style="border-radius: 20px;" required>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-success btn-block"  style="border-radius: 20px;">Create Account</button>
+                                        </div>
+                                        <br><br>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<br><br>
+
+{% endblock%}

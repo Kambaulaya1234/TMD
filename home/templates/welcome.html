@@ -1,0 +1,427 @@
+{% extends 'layouts/base.html'%}
+{% block content %}
+{% load base %}
+
+<!-- Banner Area Starts -->
+<section class="banner-area">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 px-0">
+                <div class="banner-bg"></div>
+            </div>
+            <div class="col-lg-6 align-self-center">
+                <div class="banner-text">
+                    <h1>find your dream <span>job</span> with JR port</h1>
+                    <p class="py-3">we are about to make you there ,where your dream come true</p>
+                    {% if user.is_authenticated %}
+                    {% if jobs %}
+                    <a href="{% url 'category:index' %}" class="secondary-btn">explore now<span
+                            class="flaticon-next"></span></a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Banner Area End -->
+
+{% if user.is_authenticated %}
+{% if jobs %}
+
+
+<!-- Search Area Starts -->
+<div class="search-area">
+    <div class="search-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form action="{% url 'home:search' %}" class="d-md-flex justify-content-between">
+                      
+                        
+                        {{ form.category }}
+                        {{ form.department }}
+                        <!-- <input type="text" name="keyword" placeholder="Search Keyword" onfocus="this.placeholder = ''"
+                            onblur="this.placeholder = 'Search Keyword'" required>  -->
+                        {{ form.keyword }}
+                        <!-- {{ form.as_p }} -->
+
+                        <button type="submit" class="template-btn">find job</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Search Area End -->
+
+
+<!-- Category Area Starts -->
+<section class="category-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-top text-center">
+                    <h2>Find job by category</h2>
+                    <p>Open lesser winged midst wherein may morning</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endif %}
+{% else%}
+<!-- Feature Area Starts -->
+<hr>
+{% endif %}
+
+
+<!-- Category Area End -->
+
+<!-- Jobs Area Starts -->
+{% if user.is_authenticated %}
+
+{% if jobs %}
+<section class="jobs-area section-padding3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="jobs-title">
+                    <h2>Browse recent jobs</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="jobs-tab tab-item">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#recent" role="tab"
+                                aria-controls="home" aria-selected="true">recent</a>
+                        </li>
+                        {% for job in jobs %}
+
+                        {% if job.category.title == 'FULL' %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#full-time" role="tab"
+                                aria-controls="profile" aria-selected="false">full time</a>
+                        </li>
+                        {% endif %}
+
+
+                        {% if job.category.title == 'PART' %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#part-time" role="tab"
+                                aria-controls="part-time" aria-selected="false">part time</a>
+                        </li>
+                        {% endif %}
+
+                        {% if job.category.title == 'INTERN' %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab2" data-toggle="tab" href="#intern" role="tab"
+                                aria-controls="intern" aria-selected="false">intern</a>
+                        </li>
+                        {% endif %}
+
+                        {% endfor %}
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="recent" role="tabpanel" aria-labelledby="home-tab">
+                        {% for job in jobs %}
+                        {% if forloop.first %}
+                        <div class="single-job mb-4 d-lg-flex justify-content-between">
+                            <div class="job-text">
+                                <h4>{{ job.title }}</h4>
+                                <ul class="mt-4">
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-map-marker"></i>{{ job.company.location }}</h5>
+                                    </li>
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-pie-chart"></i> Applied Chemistry & Chemical Engineering /
+                                            Chemistry</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class="fa fa-clock-o"></i> Deadline Deadline: Dec 11, 2018</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="job-img align-self-center">
+                                <img src="{{ job.company.logo.url }}" alt="." height="100px">
+                            </div>
+                            <div class="job-btn align-self-center">
+                                <a href="#" class="third-btn job-btn1">full time</a>
+                                <a href="{{ job.get_absolute_url }}" class="third-btn">apply</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endif %}
+
+                    {% if job.category.title == 'FULL' %}
+                    <div class="tab-pane fade" id="full-time" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="single-job mb-4 d-lg-flex justify-content-between">
+                            <div class="job-text">
+                                <h4>{{ job.title }}</h4>
+                                <ul class="mt-4">
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-map-marker"></i> new yourk, USA</h5>
+                                    </li>
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-pie-chart"></i> Applied Chemistry & Chemical Engineering /
+                                            Chemistry</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class="fa fa-clock-o"></i> Deadline Deadline: Dec 11, 2018</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="job-img align-self-center">
+                                <img src="{{ job.company.logo.url }}" alt="job" height="100px">
+                            </div>
+                            <div class="job-btn align-self-center">
+                                <a href="#" class="third-btn job-btn2">{{ job.category }} TIME</a>
+                                <a href="{{ job.get_absolute_url }}" class="third-btn">apply</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+                    {% if job.category.title == 'PART' %}
+                    <div class="tab-pane fade" id="part-time" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="single-job mb-4 d-lg-flex justify-content-between">
+                            <div class="job-text">
+                                <h4>Deputy Manager/ Assistant Manager - Footwear</h4>
+                                <ul class="mt-4">
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-map-marker"></i> new yourk, USA</h5>
+                                    </li>
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-pie-chart"></i> Applied Chemistry & Chemical Engineering /
+                                            Chemistry</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class="fa fa-clock-o"></i> Deadline Deadline: Dec 11, 2018</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="job-img align-self-center">
+                                <img src="{{ job.company.logo.url }}" alt="job" height="100px">
+                            </div>
+                            <div class="job-btn align-self-center">
+                                <a href="#" class="third-btn job-btn3">{{ job.category }} TIME</a>
+                                <a href="#" class="third-btn">apply</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if job.category.title == 'INTERN' %}
+                    <div class="tab-pane fade" id="intern" role="tabpanel" aria-labelledby="contact-tab2s">
+                        <div class="single-job mb-4 d-lg-flex justify-content-between">
+                            <div class="job-text">
+                                <h4>{{ job.title }}</h4>
+                                <ul class="mt-4">
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-map-marker"></i> new yourk, USA</h5>
+                                    </li>
+                                    <li class="mb-3">
+                                        <h5><i class="fa fa-pie-chart"></i> Applied Chemistry & Chemical Engineering /
+                                            Chemistry</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class="fa fa-clock-o"></i> Deadline Deadline: Dec 11, 2018</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="job-img align-self-center">
+                                <img src="{{ job.company.logo.url }}" alt="job" height="100px">
+                            </div>
+                            <div class="job-btn align-self-center">
+                                <a href="#" class="third-btn job-btn4">{{ job.category }} TIME</a>
+                                <a href="{{ job.get_absolute_url }}" class="third-btn">apply</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+                <!-- <div class="single-job d-lg-flex justify-content-between">
+                        <div class="job-text">
+                            <h4>Manager/ Asst. Manager (Quality Assurance)</h4>
+                            <ul class="mt-4">
+                                <li class="mb-3"><h5><i class="fa fa-map-marker"></i> new yourk, USA</h5></li>
+                                <li class="mb-3"><h5><i class="fa fa-pie-chart"></i> Applied Chemistry & Chemical Engineering / Chemistry</h5></li>
+                                <li><h5><i class="fa fa-clock-o"></i> Deadline Deadline: Dec 11, 2018</h5></li>
+                            </ul>
+                        </div>
+                        <div class="job-img align-self-center">
+                            <img src="assets/images/job5.png" alt="job">
+                        </div>
+                        <div class="job-btn align-self-center">
+                            <a href="#" class="third-btn job-btn2">full time</a>
+                            <a href="#" class="third-btn">apply</a>
+                        </div>
+                    </div> -->
+            </div>
+        </div>
+        <div class="more-job-btn mt-5 text-center">
+            <a href="{% url 'category:index' %}" class="template-btn">more job post</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- Jobs Area End -->
+
+<!-- Newsletter Area Starts -->
+<!-- <section class="newsletter-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-top text-center">
+                    <h2>Get job information daily</h2>
+                    <p>Subscribe to our newsletter and get a coupon code!</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <form action="#">
+                    <input type="email" placeholder="Your email here" onfocus="this.placeholder = ''"
+                        onblur="this.placeholder = 'Your email here'" required>
+                    <button type="submit" class="template-btn">subscribe now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- Newsletter Area End -->
+
+<br><br>
+
+<!-- News Area Starts -->
+<!-- <section id="blog" class="news-area section-padding3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-top text-center">
+                    <h2>Company latest news</h2>
+                    <p>Open lesser winged midst wherein may morning</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="single-news mb-5 mb-lg-0">
+                    <div class="news-img news-img1"></div>
+                    <div class="news-tag">
+                        <ul class="my-4">
+                            <li>
+                                <h5><i class="fa fa-calendar-o"></i> 20th sep, 2018</h5>
+                            </li>
+                            <li class="separator mx-2"><span></span></li>
+                            <li>
+                                <h5><i class="fa fa-folder-open-o"></i> company</h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="news-title">
+                        <h4><a href="#">Lime recalls electric scooters over battery fire.</a></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-news mb-5 mb-lg-0">
+                    <div class="news-img news-img2"></div>
+                    <div class="news-tag">
+                        <ul class="my-4">
+                            <li>
+                                <h5><i class="fa fa-calendar-o"></i> 18th sep, 2018</h5>
+                            </li>
+                            <li class="separator mx-2"><span></span></li>
+                            <li>
+                                <h5><i class="fa fa-folder-open-o"></i> company</h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="news-title">
+                        <h4><a href="#">Apple resorts to promo deals trade to boost</a></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-news">
+                    <div class="news-img news-img3"></div>
+                    <div class="news-tag">
+                        <ul class="my-4">
+                            <li>
+                                <h5><i class="fa fa-calendar-o"></i> 25th sep, 2018</h5>
+                            </li>
+                            <li class="separator mx-2"><span></span></li>
+                            <li>
+                                <h5><i class="fa fa-folder-open-o"></i> company</h5>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="news-title">
+                        <h4><a href="#">Lime recalls electric scooters over battery fire.</a></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- News Area End -->
+
+
+
+<!-- Download Area Starts -->
+<!-- <section class="download-area section-padding">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="download-text">
+                    <h2>Download the app your mobile today</h2>
+                    <p class="py-3">Light earth also land can't. May you midst shall lights blessed in lights Have
+                        gathered image morning blessed grass him. Appear female rule all seas she'd winged</p>
+                    <div class="download-button d-sm-flex flex-row justify-content-start">
+                        <div class="download-btn mb-3 mb-sm-0 flex-row d-flex">
+                            <i class="fa fa-apple" aria-hidden="true"></i>
+                            <a href="#">
+                                <p>
+                                    <span>Available</span> <br>
+                                    on App Store
+                                </p>
+                            </a>
+                        </div>
+                        <div class="download-btn dark flex-row d-flex">
+                            <i class="fa fa-android" aria-hidden="true"></i>
+                            <a href="#">
+                                <p>
+                                    <span>Available</span> <br>
+                                    on Play Store
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 pr-0">
+                <div class="download-img"></div>
+            </div>
+        </div>
+    </div>
+</section> -->
+<!-- Download Area End -->
+
+{% endif %}
+
+{% endblock %}
