@@ -1,0 +1,230 @@
+{% extends 'admin_layouts/administrator.html'%} {% load static %}
+{% block title%} share | TMD {% endblock%}
+{% block content %}
+{% for week in weeks %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{ week.month}},{{ week.year}}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Share</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+{% if week.share.all %}
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <div class="row justify-content-between">
+                <h3 class="card-title">{{ week.name}} | Active Share List</h3>
+                <div class="float-right">
+                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
+                        Share</a>
+
+                    <a href="#" class="btn btn-warning btn-sm">
+                        <label for="import"> Import Excel(.xls)</label></a>
+                    <input style="display: none;" type="file" class="btn btn-primary btn-sm" id="import">
+                    <a href="#" class="btn btn-primary btn-sm">
+                        Export Excel(.xls) </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 1%">
+                            #
+                        </th>
+                        <th style="width: 20%">
+                            Team Member
+                        </th>
+                        <th>
+                            Profile
+                        </th>
+                        <th>
+                            Hisa
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            jamii
+                        </th>
+
+                        <th style="width: 20%" class="text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for share in week.share.all %}
+                    <tr>
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+                        <td>
+                            <a>
+                                <!-- {{ share.user.get_full_name }} -->
+                                <strong>{{ share.member|title }}</strong>
+                            </a>
+                            <br>
+                            <small>
+                                Created {{ share.created_at }}
+                            </small>
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <img alt="." class="table-avatar" src="{{ share.member.user.profile.profile.url }}">
+                                </li>
+
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>{{ share.hisa }}</strong>
+
+                        </td>
+                        <td>
+                            TSH <strong>{{ share.amount }}</strong>
+
+                        </td>
+                        <td>
+                            <strong>TSH {{ share.jamii }}/=</strong>
+                            <!-- <td class="project_progress">
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
+                                    aria-volumemin="0" aria-volumemax="100" style="width: 57%">
+                                </div>
+                            </div>
+                            <small>
+                                57% Complete
+                            </small>
+                        </td> -->
+                            <!-- <td class="project-state">
+                            <span class="badge badge-success">Success</span>
+                        </td> -->
+                        <td class="text-center">
+                            <a class="btn btn-primary btn-sm" href="#">
+                                <i class="fas fa-folder">
+                                </i>
+                            </a>
+                            <a class="btn btn-info btn-sm" href="#">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                            </a>
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle='modal'
+                                data-target="#deleteShare{{ share.id }}">
+                                <i class="fas fa-trash">
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <!-- Create Modal -->
+                    <div class="modal fade" id="deleteShare{{ share.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Delete Share
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ share.delete }}">
+                                        {% csrf_token %}
+                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ share.user|title }}
+                                                Share</strong>?</p>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Share
+                                            </button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Modal -->
+
+
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+
+
+    
+</section>
+{% else %}
+<div class="jumbotron text-center">
+    <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
+       
+        <h5>No data found at this week</h5>
+        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
+            Share</a>
+    </div>
+</div>
+{% endif %}
+
+{% empty %}
+<div class="jumbotron text-center">
+    <div class="text-center" style="border: 1px solid red;border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
+        <h5>No data found at {% now 'M' %}|{% now 'Y' %}</h5>
+        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
+            Share</a>
+    </div>
+</div>
+
+
+
+
+{% endfor %}
+
+
+<div class="modal fade" id="createShare">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Share</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'share:index' %}" method="POST">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Create Share</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

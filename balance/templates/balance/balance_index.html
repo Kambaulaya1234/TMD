@@ -1,0 +1,132 @@
+{% extends 'admin_layouts/administrator.html'%} {% load static %}
+{% block title%} balance | TMD {% endblock%}
+{% load humanize %}
+{% block content %}
+
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>TMD System Balance</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Balance</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+
+
+<section class="content">
+  <div class="container-fluid">
+    <h5 class="mb-2">Balance Summary</h5>
+    <div class="row">
+      <div class="col-lg-4 col-4">
+        <!-- small card -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            <p> <strong> Insurance Amount</strong></p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-4 col-4">
+        <!-- small card -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            <p> <strong>Fines Amount</strong></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-4 col-4">
+        <!-- small card -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            <p> <strong> Share(Hisa) Amount</strong></p>
+
+          </div>
+          <div class="icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-4">
+        <!-- small card -->
+        <div class="small-box bg-secondary">
+          <div class="inner">
+            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            <p> <strong> Jamii Amount</strong></p>
+            <p></p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-4 col-4">
+        <!-- small card -->
+        <div class="small-box bg-primary">
+          <div class="inner">
+            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            <p> <strong> Loan Amount </strong></p>
+            <p></p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-4 col-4">
+        <!-- small card -->
+        <div class="small-box bg-danger">
+          <div class="inner">
+            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+
+            <p> <strong>Total amount </strong></p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

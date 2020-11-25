@@ -1,3 +1,4 @@
+from django.contrib.messages import constants as messages
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,15 +20,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-# ==================Custom App======================
-    'home',
-    'accounts',
-    'administrator',
-    
-   'administrator.src.admin_group',
-   'administrator.src.admin_user',
-   'administrator.src.admin_contact',
-# ==================Built in App======================
+    # ==================Custom App======================
+    'home','accounts','administrator','share',
+    'member','loan','balance','report',
+
+    'administrator.src.admin_group',
+    'administrator.src.admin_user',
+    'administrator.src.admin_contact',
+    # ==================Built in App======================
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +45,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'home.middleware.HomeMiddleware',
+
 ]
 
 ROOT_URLCONF = 'TMD.urls'
@@ -71,10 +73,19 @@ WSGI_APPLICATION = 'TMD.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tmd',
+        'USER': 'conic',
+        'PASSWORD': '0852'
     }
 }
 
@@ -124,3 +135,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_DIRS = [
     BASE_DIR / 'TMD/static',
 ]
+# Message
+MESSAGE_TAGS = {
+
+    messages.ERROR: 'danger',
+    messages.SUCCESS: 'success',
+    messages.INFO: 'info',
+    messages.WARNING: 'warning',
+    messages.DEBUG: 'debug',
+
+}

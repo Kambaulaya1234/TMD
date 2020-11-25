@@ -1,4 +1,4 @@
 from django.contrib import admin
 
 # Register your models here.
-admin.site.site_header='OLS ADMIN PANEL'
+admin.site.site_header='TMD ADMIN PANEL'

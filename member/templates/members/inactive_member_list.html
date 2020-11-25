@@ -1,0 +1,216 @@
+{% extends 'admin_layouts/administrator.html'%} {% load static %}
+{% block title%} member | TMD {% endblock%}
+{% block content %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>TMD Inactive Members</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">member</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <div class="row justify-content-between">
+                <h3 class="card-title">Inactive Members List </h3>
+
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 1%">
+                            #
+                        </th>
+                        <th>
+                            Username
+                        </th>
+                        <th>
+                            Profile
+                        </th>
+                        <th>
+                            First Name
+                        </th>
+                        <th>
+                            Last Name
+                        </th>
+                        <th class="text-center">
+                            Email
+                        </th>
+                        <th>
+                            status
+                        </th>
+                        <!-- <th class="text-center">
+                            Status
+                        </th> -->
+
+                        <th style="width: 20%" class="text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+                        <td>
+                            <a>
+                                <!-- {{ member.user.get_full_name }} -->
+                                <strong>{{ member.user.username|title }}</strong>
+                            </a>
+                            <br>
+
+                        </td>
+                        <td>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <img alt="." class="table-avatar" src="{{ member.user.profile.profile.url }}">
+                                </li>
+
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>{{ member.user.first_name }}</strong>
+
+                        </td>
+                        <td>
+                            <strong> {{ member.user.last_name }}</strong>
+
+                        </td>
+                        <td class="text-center">
+                            <strong> {{ member.user.email }}</strong>
+
+                        </td>
+                        <td class="project-state">
+                            {% if member.is_fine %}
+                            <span class="badge badge-success">Active</span>
+                            {% else %}
+                            <span class="badge badge-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <!-- <td class="project_progress">
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
+                                    aria-volumemin="0" aria-volumemax="100" style="width: 57%">
+                                </div>
+                            </div>
+                            <small>
+                                57% Complete
+                            </small>
+                        </td> -->
+                        <!-- <td class="project-state">
+                            <span class="badge badge-success">Success</span>
+                        </td> -->
+                        <td class="text-center">
+                            <a class="btn btn-warning btn-sm" href="#" data-toggle='modal'
+                                data-target="#deleteShare{{ member.id }}">
+                                <i class="fas fa-key">
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <!-- Create Modal -->
+                    <div class="modal fade" id="deleteShare{{ member.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Activate member
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- {{ member.delete }} -->
+                                    <form action="">
+                                        {% csrf_token %}
+                                        <p>You about to activate Access to Member<strong style="color: red;">
+                                                {{ member.user|title }}
+                                            </strong></p>
+                                        <ul class="list-group">
+                                            {% for share in member.share.all %}
+                                            <li class="list-group-item">Fine: Tsh
+                                                <strong>{{ share.fine_amount }}/=</strong></li>
+                                            <li class="list-group-item">week: <strong>{{ share.week }}</strong></li>
+                                            <li class="list-group-item">From: <strong>{{ share.created_at }}</strong>
+                                            </li>
+                                            {% endfor %}
+                                            <li class="list-group-item">Activated by You 
+                                                (<strong>{{ user.get_full_name }}</strong>)</li>
+                                        </ul>
+                                        <br>
+                                        <input class="form-control" type="password" name="password"
+                                            placeholder="Re-enter Your Password">
+
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Yes? Activate Member
+                                            </button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Modal -->
+
+
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+
+
+    <div class="modal fade" id="createMember">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create Member</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'member:index' %}" method="POST">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Create Member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
