@@ -55,7 +55,9 @@
                 <th>Last Name</th>
                 <th>Group</th>
                 <th>Status</th>
+                {% if perms.auth.change_user or perms.auth.delete_user %}
                 <th>Actions</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -83,20 +85,18 @@
                 <td><span class="badge badge-success">Active</span></td>
 
                 <td>
-                  {% if user.username == 'jackson' %}
-                  <span title="No any action allowed here " style="color: red;"> 
-                  <i class="fa fa-ban"></i>
-                  <i class="fa fa-ban"></i>
-                    </span>
-                  {% else %}
+                  {% if perms.auth.change_user %}
                   <a title="Edit user info" style="margin-right: 10px;" href="" data-toggle="modal"
                     data-target="#edituser{{ user.id }}" class="text-primary"> <i class="fa fa-edit"></i> </a>
+                  {% endif %}
+
+                  {% if perms.auth.delete_user %}
 
                   <a title="Delete user " href="javascript:void(0)" data-toggle='modal'
                     data-target="#deleteuser{{ user.id }}" class="text-danger"> <i class="fa fa-trash"></i> </a>
-                    {% endif %}
-               
-                  </td>
+                  {% endif %}
+
+                </td>
               </tr>
 
 
@@ -143,30 +143,32 @@
                       <form action="{% url 'administrator:update_user' user.id %}" method="POST">
                         {% csrf_token %}
                         <div class="form-group" style="padding: 10px 30px;">
-                      <p> 
-                         <select style="text-transform: uppercase;" name="groups" class="form-control" placeholder="Select groups" id="id_groups" required>
-                          <!-- {% for gp in user.groups.all %}
+                          <p>
+                            <select style="text-transform: uppercase;" name="groups" class="form-control"
+                              placeholder="Select groups" id="id_groups" required>
+                              <!-- {% for gp in user.groups.all %}
                           <option  selected  disabled value="{{ gp.id }}">--KEEP {{ gp.name }} GROUP--</option> 
                           {% endfor %} -->
-                          <option  selected  disabled value="">--choose GROUP--</option> 
-                          {% for field in  form.groups %}
+                              <option selected disabled value="">--choose GROUP--</option>
+                              {% for field in  form.groups %}
                               <!-- {%if field.html_name  in  user.groups.all  %}
                           <option selected  value="{{ field.id }}">{{ field.name }} </option> 
                                     {% endif  %} -->
-                                    {{ field }}
-                          {% endfor %}
-                         
-                        </select>
-                      </p>
-                              <p> <input type="text" name="username" class="form-control" value="{{ user.username }}" autofocus
-                                  placeholder="create  your username" maxlength="150" required="" id="id_username"></p>
-                              <p> <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}"
-                                  placeholder="Enter firstname" maxlength="30" id="id_first_name"></p>
-                              <p> <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}"
-                                  placeholder="Enter your last name" maxlength="150" id="id_last_name"></p>
-                              <p> <input type="email" name="email" class="form-control" placeholder="Email email"
-                                  maxlength="254" id="id_email" value="{{ user.email }}"> </p>
-                              <br>
+                              {{ field }}
+                              {% endfor %}
+
+                            </select>
+                          </p>
+                          <p> <input type="text" name="username" class="form-control" value="{{ user.username }}"
+                              autofocus placeholder="create  your username" maxlength="150" required=""
+                              id="id_username"></p>
+                          <p> <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}"
+                              placeholder="Enter firstname" maxlength="30" id="id_first_name"></p>
+                          <p> <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}"
+                              placeholder="Enter your last name" maxlength="150" id="id_last_name"></p>
+                          <p> <input type="email" name="email" class="form-control" placeholder="Email email"
+                              maxlength="254" id="id_email" value="{{ user.email }}"> </p>
+                          <br>
 
                         </div>
 
@@ -264,14 +266,14 @@
             <!-- ==================================================== -->
             <p> {{ form.email }} </p>
             <!-- ==================================================== -->
-              
-              <select name="groups" class="form-control" placeholder="Select groups" id="id_groups" required>
-               <option selected disabled value="1">--choose group--</option> 
-               {% for field in form.groups %}
-                     {{ field }} 
-               {% endfor %}
-             </select>
-           </p>
+
+            <select name="groups" class="form-control" placeholder="Select groups" id="id_groups" required>
+              <option selected disabled value="1">--choose group--</option>
+              {% for field in form.groups %}
+              {{ field }}
+              {% endfor %}
+            </select>
+            </p>
 
           </div>
         </div>

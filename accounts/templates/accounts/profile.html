@@ -56,7 +56,7 @@
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Balance Summary</h3>
-  
+
       </div>
       <div class="card-body" style="display: block;">
         <div class="row">
@@ -111,6 +111,12 @@
                 </div>
               </div>
             </div>
+
+
+
+
+
+            
             <!-- <div class="row">
               <div class="col-12">
                 <h4>Recent Activity</h4>
@@ -171,16 +177,16 @@
                 </div>
               </div>
             </div> -->
-  
-  
-  
+
+
+
           </div>
         </div>
       </div>
       <!-- /.card-body -->
     </div>
     <!-- /.card -->
-  
+
   </section>
 
 
@@ -194,43 +200,28 @@
 
 
 
-    <di class="text-center">
-      <div class="col-md-6">
-        {% if user.profile.profile %}
-        <!-- <a href="#">
+  <di class="text-center">
+    <div class="col-md-6">
+      {% if user.profile.profile %}
+      <!-- <a href="#">
                 <img src="/media/{{user.profile.profile}}" height="200px" width="200px" class="img-circle">
             </a> <br> -->
-        {% else %}
-        <a href="#">
-          <img src="/media/images/users/default/she.png" height="200px" width="200px" class="img-circle">
-        </a> <br>
-        {% endif  %}
+      {% else %}
+      <a href="#">
+        <img src="/media/images/users/default/she.png" height="200px" width="200px" class="img-circle">
+      </a> <br>
+      {% endif  %}
 
-
-
-
-
-
-
-        <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
-
-          {% csrf_token %} <br>
-          <div class="form-group ">
-            <label for="file">Change Profile</label>
-            <input type="file" name="upload" id="file" class="btn btn-sm btn-primary mr-4 " required>
-            <input type="hidden" name="status" value="{{request.user.profile.status }}">
-          </div>
-          <input type="submit" value="upload profile" class="btn btn-primary">
-
-        </form>
-
-
-
-
-      </div>
-
-
-
-    </di>
-  </div>
-  {% endblock %}
+      <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} <br>
+        <div class="form-group ">
+          <label for="file">Change Profile</label>
+          <input type="file" name="upload" id="file" class="btn btn-sm btn-primary mr-4 " required>
+          <input type="hidden" name="status" value="{{request.user.profile.status }}">
+        </div>
+        <input type="submit" value="upload profile" class="btn btn-primary">
+      </form>
+    </div>
+  </di>
+</div>
+{% endblock %}

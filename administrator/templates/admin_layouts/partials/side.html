@@ -1,25 +1,24 @@
 {% load static %}
 {% load base %}
-<!-- Main Sidebar Container -->
-<!--  -->
 <aside class=" main-sidebar elevation-4 sidebar-light-primary">
-
-  <!-- Brand Logo -->
-  <a href="/admin" class="brand-link navbar-white">
-    <img src="{% static 'administrator/dist/img/logo.png' %}" alt="." class="brand-image img-circle "
-      style="opacity: .8" width="10px">
-    <span class="brand-text font-weight-light">The Atlais</span>
+  <a href="{% url 'administrator:index' %}" class="brand-link navbar-white">
+    <img src="{% static 'logo/atlais.png' %}" alt="." class="brand-image " style="opacity: .8" width="10px">
+    <!-- <span class="brand-text font-weight-light">The Atlais</span> -->
   </a>
-
-  <!-- Sidebar -->
   <div class="sidebar">
-    <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
         <!-- <img src="{{ user.profile.profile.url }}" class="img-circle " alt="."> -->
       </div>
-      <div class="info">
-        <a href="#" class="d-block" style="text-transform: uppercase;">WELCOME TMD SYSTEM</a>
+      <div class="info ">
+        <div class="row">
+          
+          
+          <a href="{% url 'administrator:normal' %}" class="d-block" style="text-transform: uppercase;font-weight:900" >
+            <i class="nav-icon fas fa-home"></i>
+            TMD SYSTEM</a>
+        
+        </div>
       </div>
     </div>
 
@@ -35,25 +34,38 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            <!-- {% if perms.auth.view_user or perms.loan.view_loan or perms.member.view_member %}
             <li class="nav-item">
               <a href="{% url 'administrator:index' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
                 <p class="text">Admin Dashboard</p>
               </a>
             </li>
+            {% endif %} -->
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="{% url 'administrator:index' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
-                <p class="text">Normal Dashboard</p>
+                <p class="text">Admin Dashboard</p>
               </a>
             </li>
+            
+            <!-- <li class="nav-item">
+              <a href="{% url 'administrator:normal' %}" class="nav-link">
+                <i class="nav-icon far fa-circle text-primary"></i>
+                <p class="text">Dashboard</p>
+              </a>
+            </li> -->
 
           </ul>
         </li>
 
 
+        {% if perms.auth.view_group or perms.auth.view_user or perms.member.view_member %}
 
         <li class="nav-header">System</li>
+        {% endif %}
+
+        {% if perms.auth.view_group %}
 
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
@@ -71,23 +83,18 @@
                 <p class="text">Active lists </p>
               </a>
             </li>
-            <!-- <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon far fa-circle text-primary"></i>
-                  <p class="text">Inactive Lists </p>
-                </a>
-              </li> -->
-
-
-
 
           </ul>
         </li>
+        {% endif %}
+
+
+        {% if perms.auth.view_user %}
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
-            <i class="nav-icon fa fa-users"></i>
+            <i class="nav-icon fa  fa-fighter-jet "></i>
             <p>
-              Users
+              Supervisors
               <i class="fas fa-angle-left right"></i>
               <span class="badge badge-info right">{% user_count %}</span>
             </p>
@@ -96,12 +103,16 @@
             <li class="nav-item">
               <a href="{% url 'administrator:user' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
-                <p class="text">Active Users</p>
+                <p class="text">Active Supervisors</p>
               </a>
             </li>
 
           </ul>
         </li>
+        {% endif %}
+
+        {% if perms.member.view_member %}
+
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
             <i class="nav-icon fa fa-users"></i>
@@ -127,10 +138,11 @@
 
           </ul>
         </li>
+        {% endif %}
 
-        <li class="nav-header">Configuration</li>
+        <!-- <li class="nav-header">Configuration</li> -->
 
-        <li class="nav-item has-treeview">
+        <!-- <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
             <i class="nav-icon fa fa-microchip "></i>
             <p>
@@ -200,14 +212,14 @@
             </li>
 
           </ul>
-        </li>
+        </li> -->
 
 
         <li class="nav-header">Management </li>
-
+        {% if perms.share %}
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
-            <i class="nav-icon fa fa-folder-open"></i>
+            <i class="nav-icon fa  fa-bars"></i>
             <p>
               Share|Hisa|Kuku
               <i class="fas fa-angle-left right"></i>
@@ -215,39 +227,49 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-
+            {% if perms.share.view_share %}
             <li class="nav-item">
               <a href="{% url 'share:index' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
                 <p class="text">Active Share list</p>
               </a>
             </li>
-
+            {% endif %}
+            {% if perms.share.view_weekmodel %}
             <li class="nav-item">
               <a href="{% url 'share:weeks' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
                 <p class="text">Active Week</p>
               </a>
             </li>
-
+            {% endif %}
+            {% if perms.share.view_monthmodel %}
             <li class="nav-item">
               <a href="{% url 'share:months' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
                 <p class="text">Active Month</p>
               </a>
             </li>
+            {% endif %}
+            {% if perms.share.view_yearmodel %}
             <li class="nav-item">
               <a href="{% url 'share:years' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
                 <p class="text">Active Year</p>
               </a>
             </li>
+            {% endif %}
 
           </ul>
         </li>
+
+        {% endif %}
+
+        {% if perms.loan %}
+
         <li class="nav-item has-treeview">
           <a href="" class="nav-link">
-            <i class="nav-icon fa fa-graduation-cap"></i>
+            <i class="nav-icon fa fa-align-center"></i>
             <p>
               Loan Information
               <i class="fas fa-angle-left right"></i>
@@ -255,6 +277,7 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            {% if perms.loan.view_loan %}
 
             <li class="nav-item">
               <a href="{% url 'loan:index' %}" class="nav-link">
@@ -262,35 +285,35 @@
                 <p class="text">Loan list</p>
               </a>
             </li>
+            {% endif %}
 
-            <li class="nav-item">
-              <a href="{% url 'loan:index' %}" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
-                <p class="text">Paid Loan list</p>
-              </a>
-            </li>
 
           </ul>
         </li>
+        {% endif %}
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a href="{% url 'report:index' %}" class="nav-link ">
-            <i class="nav-icon fa fa-envelope"></i>
+            <i class="nav-icon fa fa-bullhorn"></i>
             <p>
               Reports
-              <!-- <span class="right badge badge-primary">New</span> -->
+              <span class="right badge badge-primary">New</span>
             </p>
           </a>
-        </li>
+        </li> -->
+
+        {% if perms.balance %}
+
         <li class="nav-item">
           <a href="{% url 'balance:index' %}" class="nav-link ">
-            <i class="nav-icon fa fa-thumbs-up"></i>
+            <i class="nav-icon fa  fa-briefcase"></i>
             <p>
               Balance
               <!-- <span class="right badge badge-primary">New</span> -->
             </p>
           </a>
         </li>
+        {% endif %}
 
         <br><br>
 

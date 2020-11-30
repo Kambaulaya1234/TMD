@@ -139,7 +139,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- {{ member.delete }} -->
-                                    <form action="">
+                                    <form action="{{ member.activate }}" method="POST">
                                         {% csrf_token %}
                                         <p>You about to activate Access to Member<strong style="color: red;">
                                                 {{ member.user|title }}
@@ -148,14 +148,21 @@
                                             {% for share in member.share.all %}
                                             <li class="list-group-item">Fine: Tsh
                                                 <strong>{{ share.fine_amount }}/=</strong></li>
+                                                <input type="hidden" name="week_id" value="{{ share.week.id }}">
+                                                <input type="hidden" name="year_id" value="{{ share.year.id }}">
                                             <li class="list-group-item">week: <strong>{{ share.week }}</strong></li>
                                             <li class="list-group-item">From: <strong>{{ share.created_at }}</strong>
                                             </li>
                                             {% endfor %}
+                                            <li class="list-group-item">Jamii
+                                                <strong>TZS 5000/=</strong></li>
                                             <li class="list-group-item">Activated by You 
                                                 (<strong>{{ user.get_full_name }}</strong>)</li>
                                         </ul>
                                         <br>
+                                        <input class="form-control" type="number" name="hisa"
+                                            placeholder="Enter Share or Hisa">
+                                    
                                         <input class="form-control" type="password" name="password"
                                             placeholder="Re-enter Your Password">
 

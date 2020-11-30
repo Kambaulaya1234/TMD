@@ -1,6 +1,7 @@
 {% extends 'admin_layouts/administrator.html'%} {% load static %}
 {% block title%} share | TMD {% endblock%}
 {% block content %}
+{% load humanize %}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -9,8 +10,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Share</li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">loan</li>
                 </ol>
             </div>
         </div>
@@ -22,17 +23,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row justify-content-between">
-                <h3 class="card-title"> Active Weeks List</h3>
-                <div class="float-right">
-                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
-                        Share</a>
-
-                    <a href="#" class="btn btn-warning btn-sm">
-                        <label for="import"> Import Excel(.xls)</label></a>
-                    <input style="display: none;" type="file" class="btn btn-primary btn-sm" id="import">
-                    <a href="#" class="btn btn-primary btn-sm">
-                        Export Excel(.xls) </a>
-                </div>
+                <h3 class="card-title"> Loan List</h3>
             </div>
         </div>
         <div class="card-body p-0">
@@ -52,7 +43,10 @@
                             Loan Profit
                         </th>
                         <th>
-                          Insurance
+                            Insurance
+                        </th>
+                        <th>
+                            Total Amount
                         </th>
                         <th>
                             starting
@@ -83,39 +77,42 @@
                             <br>
                         </td>
                         <td>
-                            {{ loan.amount }}
+                            {{ loan.amount|intword|intcomma }}
                         </td>
                         <td>
-                            {{ loan.profit_amount }}
+                            {{ loan.profit_amount|intword|intcomma }}
                         </td>
                         <td>
-                            {{ loan.insurance }}
+                            {{ loan.insurance|intword|intcomma }}
                         </td>
                         <td>
-                             {{ loan.created_at }}
+                            {{ loan.total|intword|intcomma }}
+                        </td>
+                        <td>
+                            {{ loan.created_at }}
                         </td>
                         <td>
                             {{ loan.deadline }}
                         </td>
                         <td>
                             {% if  loan.status %}
-                            <span  class="badge badge-success">Completed</span>
+                            <span class="badge badge-success">Completed</span>
                             {% else %}
-                            <span  class="badge badge-danger">Incomplete</span>
+                            <span class="badge badge-danger">Incomplete</span>
                             {% endif %}
-                           
+
                         </td>
 
 
                         <td class="text-center">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            <!-- <a class="btn btn-primary btn-sm" href="#">
                                 <i class="fas fa-folder">
                                 </i>
                             </a>
                             <a class="btn btn-info btn-sm" href="#">
                                 <i class="fas fa-pencil-alt">
                                 </i>
-                            </a>
+                            </a> -->
                             <a class="btn btn-danger btn-sm" href="#" data-toggle='modal'
                                 data-target="#deleteShare{{ share.id }}">
                                 <i class="fas fa-trash">
@@ -137,15 +134,15 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ share.delete }}">
+                                    <form action="{{ loan.delete }}">
                                         {% csrf_token %}
-                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ share.user|title }}
-                                                Share</strong>?</p>
+                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ loan.member|title }}
+                                                Loan</strong>?</p>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-sm"
                                                 data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Share
+                                            <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Loan
                                             </button>
                                         </div>
                                 </div>

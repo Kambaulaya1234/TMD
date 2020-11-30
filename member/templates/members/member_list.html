@@ -28,11 +28,11 @@
                     <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createMember">Create
                         Member</a>
 
-                    <a href="#" class="btn btn-warning btn-sm">
+                    <!-- <a href="#" class="btn btn-warning btn-sm">
                         <label for="import"> Import Excel(.xls)</label></a>
                     <input style="display: none;" type="file" class="btn btn-primary btn-sm" id="import">
                     <a href="#" class="btn btn-primary btn-sm">
-                        Export Excel(.xls) </a>
+                        Export Excel(.xls) </a> -->
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                         <th style="width: 1%">
                             #
                         </th>
-                        <th >
+                        <th>
                             Username
                         </th>
                         <th>
@@ -130,7 +130,8 @@
                                 <i class="fas fa-eye">
                                 </i>
                             </a>
-                            <a class="btn btn-success btn-sm" href="#" title="View Profile">
+                            <a class="btn btn-success btn-sm" href="#" title="View Profile" data-toggle='modal'
+                                data-target="#loan{{ member.id }}">
                                 <i class="fa fa-align-center">
                                 </i>
                             </a>
@@ -157,13 +158,60 @@
                                 <div class="modal-body">
                                     <form action="{{ member.delete }}">
                                         {% csrf_token %}
-                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ member.username|title }}
+                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ member.user|title }}
                                                 Member</strong>?</p>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-sm"
                                                 data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Member
+                                            </button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Modal -->
+
+
+                    <!-- loan Modal -->
+                    <div class="modal fade" id="loan{{ member.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Loan Panel
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ member.payloan }}" method="POST">
+                                        {% csrf_token %}
+                                        <ul class="list-group">
+                                            <li class="list-group-item">Member:
+                                                <strong>{{ member.user }}</strong></li><br>
+                                            <div class="form-group">
+                                                <label for="amount">How Much (TZS)?</label>
+                                                <input class="form-control" type="text" name="amount" id="amount"
+                                                    placeholder="Enter Loan Amount" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="deadline">When will {{ member.user|title }} return Loan?</label>
+                                                <input class="form-control" type="date" name="deadline" id="deadline"
+                                                    placeholder="Enter Deadline Amount" required>
+                                            </div>
+                                            </li>
+
+                                            <li class="list-group-item">Assigned by You
+                                                (<strong>{{ user.get_full_name }}</strong>)</li>
+                                        </ul>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Yes? Provide Loan
                                             </button>
                                         </div>
                                 </div>

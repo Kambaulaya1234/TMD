@@ -13,6 +13,7 @@ TEAM_URLS = [
 urlpatterns = [
  # =======================init site======================================
     path('',Index.as_view(),name='index'),
+    path('normal/',NormalDashboard.as_view(),name='normal'),
 
 # =======================admin 2 site======================================
     path('',include(TEAM_URLS)),

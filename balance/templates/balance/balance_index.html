@@ -1,8 +1,8 @@
 {% extends 'admin_layouts/administrator.html'%} {% load static %}
 {% block title%} balance | TMD {% endblock%}
 {% load humanize %}
+{% load base %}
 {% block content %}
-
 
 <section class="content-header">
   <div class="container-fluid">
@@ -30,7 +30,8 @@
         <!-- small card -->
         <div class="small-box bg-info">
           <div class="inner">
-            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            {% insurance_amount as insurance%}
+            <h5>TZS <strong>{{ insurance|intword|intcomma }}</strong>/=</h5>
             <p> <strong> Insurance Amount</strong></p>
           </div>
           <div class="icon">
@@ -46,7 +47,8 @@
         <!-- small card -->
         <div class="small-box bg-success">
           <div class="inner">
-            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            {% fine_amount as fine %}
+            <h5>TZS <strong>{{ fine|intword|intcomma }}</strong>/=</h5>
             <p> <strong>Fines Amount</strong></p>
           </div>
           <div class="icon">
@@ -62,7 +64,8 @@
         <!-- small card -->
         <div class="small-box bg-warning">
           <div class="inner">
-            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            {% share_amount as hisa %}
+            <h5>TZS <strong>{{ hisa|intword|intcomma }}</strong>/=</h5>
             <p> <strong> Share(Hisa) Amount</strong></p>
 
           </div>
@@ -80,7 +83,8 @@
         <!-- small card -->
         <div class="small-box bg-secondary">
           <div class="inner">
-            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            {% jamii_amount as jamii %}
+            <h5>TZS <strong>{{ jamii|intword|intcomma }}</strong>/=</h5>
             <p> <strong> Jamii Amount</strong></p>
             <p></p>
           </div>
@@ -97,7 +101,8 @@
         <!-- small card -->
         <div class="small-box bg-primary">
           <div class="inner">
-            <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
+            {% loan_amount as loan %}
+            <h5>TZS <strong>{{ loan|intword|intcomma }}</strong>/=</h5>
             <p> <strong> Loan Amount </strong></p>
             <p></p>
           </div>

@@ -28,7 +28,7 @@ class Index(LoginRequiredMixin,View):
             'first_name':self.request.POST['first_name'],
             'last_name':self.request.POST['last_name'],
             'email':self.request.POST['email'],
-            'password':'password'
+            'password':'atlais'
         }
         group=Group.objects.filter(id=group_id)
         user=User.objects.create_user(**context)
@@ -50,6 +50,7 @@ class Index(LoginRequiredMixin,View):
         #     except BadHeaderError:
         #         return redirect('administrator:user')
         # else:
+        messages.success(self.request,f'user {user} created successfully!')
         return redirect('administrator:user')
         
 

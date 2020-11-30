@@ -25,14 +25,17 @@
             <div class="row justify-content-between">
                 <h3 class="card-title">{{ week.name}} | Active Share List</h3>
                 <div class="float-right">
+                    {% if perms.share.add_share %}
+
                     <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
                         Share</a>
+                        {% endif %}
 
-                    <a href="#" class="btn btn-warning btn-sm">
+                    <!-- <a href="#" class="btn btn-warning btn-sm">
                         <label for="import"> Import Excel(.xls)</label></a>
                     <input style="display: none;" type="file" class="btn btn-primary btn-sm" id="import">
                     <a href="#" class="btn btn-primary btn-sm">
-                        Export Excel(.xls) </a>
+                        Export Excel(.xls) </a> -->
                 </div>
             </div>
         </div>
@@ -58,10 +61,12 @@
                         <th>
                             jamii
                         </th>
-
+                        {% if perms.share.delete_share %}
                         <th style="width: 20%" class="text-center">
                             Actions
                         </th>
+                        {% endif %}
+
 
                     </tr>
                 </thead>
@@ -113,19 +118,21 @@
                             <span class="badge badge-success">Success</span>
                         </td> -->
                         <td class="text-center">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            <!-- <a class="btn btn-primary btn-sm" href="#">
                                 <i class="fas fa-folder">
                                 </i>
                             </a>
                             <a class="btn btn-info btn-sm" href="#">
                                 <i class="fas fa-pencil-alt">
                                 </i>
-                            </a>
+                            </a> -->
+                            {% if perms.share.delete_share %}
                             <a class="btn btn-danger btn-sm" href="#" data-toggle='modal'
                                 data-target="#deleteShare{{ share.id }}">
                                 <i class="fas fa-trash">
                                 </i>
                             </a>
+                            {% endif %}
                         </td>
                     </tr>
 
@@ -144,7 +151,7 @@
                                 <div class="modal-body">
                                     <form action="{{ share.delete }}">
                                         {% csrf_token %}
-                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ share.user|title }}
+                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ share.member|title }}
                                                 Share</strong>?</p>
 
                                         <div class="modal-footer">
@@ -158,10 +165,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end Modal -->
-
-
-
                     {% endfor %}
 
                 </tbody>
@@ -173,12 +176,12 @@
 
 
 
-    
+
 </section>
 {% else %}
 <div class="jumbotron text-center">
     <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
-       
+
         <h5>No data found at this week</h5>
         <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
             Share</a>

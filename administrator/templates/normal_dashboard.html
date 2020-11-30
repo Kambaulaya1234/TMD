@@ -1,96 +1,117 @@
-{% extends 'admin_layouts/administrator.html'%} {% load static %} 
-{% load base%} 
-{% block title%} administrator | icaretechnology {% endblock%} 
+{% extends 'admin_layouts/administrator.html'%}
+{% load static %}
+{% load base %}
 {% block content %}
+<div class="container py-5">
 
-<div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Admin Dashboard</h1>
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Admin Dashboard</li>
-          </ol>
-        </div>
-        <!-- /.col -->
+  <div class="col-md-12">
+    <!-- Widget: user widget style 1 -->
+    <div class="card card-widget widget-user">
+      <div class="widget-user-header bg-primary">
+        <h3 class="widget-user-username">{{ user.get_full_name }}</h3>
+        {% for group in user.groups.all %}
+        <h5 class="widget-user-desc" style="text-transform: uppercase;">{{ group.name }} Group</h5>
+        <!-- <h5 class="widget-user-desc">Founder &amp; CEO</h5> -->
+        {% endfor %}
       </div>
-      <!-- /.row -->
+
+      <div class="widget-user-image">
+        <img class="profile-user-img img-fluid img-circle" src="{{user.profile.profile.url}}" alt=".">
+      </div>
+
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">{% loan_amount   %}</h5>
+              <span class="description-text">Loan</span>
+            </div>
+          </div>
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">{% share_count request.user.member %}</h5>
+              <span class="description-text">Share/Hisa</span>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="description-block">
+              <h5 class="description-header">40000</h5>
+              <span class="description-text">Insurance</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.container-fluid -->
   </div>
-  <!-- /.content-header -->
 
-  <!-- Main content -->
+
+<!-- 
   <section class="content">
-    <div class="container-fluid">
-      <!-- Info boxes -->
-      <div class="row">
-        <div class="col-12 col-sm-6 col-md-3">
-          <div class="info-box">
-            <span class="info-box-icon bg-info elevation-1"><i class="fas fa fa-users"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">USERS</span>
-              <span class="info-box-number">
-                {% user_count %}
-                <small>members</small>
-              </span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-12 col-sm-6 col-md-3">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">SUBSCRIBERS</span>
-              <span class="info-box-number">2</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-
-        <!-- fix for small devices only -->
-        <div class="clearfix hidden-md-up"></div>
-
-        <div class="col-12 col-sm-6 col-md-3">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Jobs</span>
-              <span class="info-box-number">2</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-12 col-sm-6 col-md-3">
-          <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa fa-paw"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">GROUPS</span>
-              <span class="info-box-number">{% group_count %}</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Balance Summary</h3>
+  
       </div>
-      <!-- /.row -->
-
+      <div class="card-body" style="display: block;">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+            <div class="row">
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Profit Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">8.7mil</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Fines Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">2300</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Share(Hisa) Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">20 <span>
+                      </span></span></div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Jamii Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">20 <span>
+                      </span></span></div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Loan Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">20 <span>
+                      </span></span></div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Total amount </span>
+                    <span class="info-box-number text-center text-muted mb-0">{{ balance.total }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
-</div>
+  </section> -->
 
-{% endblock %}
+
+
+  </div>
+  {% endblock %}

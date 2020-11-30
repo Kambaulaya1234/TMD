@@ -1,35 +1,34 @@
- <!-- Navbar -->
- {% load humanize %}
+<!-- Navbar -->
+{% load humanize %}
 
- <nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item" >
-        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
-      </li>
-     
-    
-    </ul>
+<nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
+  <!-- Left navbar links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+    </li>
 
-    <!-- SEARCH FORM -->
-      <form class="form-inline ml-3">
-        <div class="input-group input-group-sm">
-          <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-navbar" type="submit">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
-      </form>
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="/" class="nav-link"><i class="fa fa-external-link"></i> VIEW SITE</a>
-      </li>
+  </ul>
 
-      <!-- <li class="nav-item dropdown">
+  <!-- <form class="form-inline ml-3">
+    <div class="input-group input-group-sm">
+      <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+      <div class="input-group-append">
+        <button class="btn btn-navbar" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form> -->
+
+  <!-- Right navbar links -->
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item d-none d-sm-inline-block">
+      <a href="/" class="nav-link"><i class="fa fa-external-link"></i> VIEW SITE</a>
+    </li>
+
+    <!-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
           <span class="badge badge-danger navbar-badge">3</span>
@@ -80,9 +79,9 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>  -->
-      <!-- Notifications Dropdown Menu -->
+    <!-- Notifications Dropdown Menu -->
 
-       <li class="nav-item dropdown">
+    <!-- <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">15</span>
@@ -102,61 +101,72 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
-      </li>
+      </li> -->
 
 
-      <!-- <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
             class="fas fa-th-large"></i></a>
       </li> -->
 
 
-{% if user.is_superuser %}
+    {% if user.is_authenticated %}
 
-      <li class="nav-item dropdown user-menu">
-        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-          <img src="{{ user.profile.profile.url }}" class="user-image img-circle elevation-2" alt=".">
-          <span class="d-none d-md-inline"> {{ user }}</span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <!-- User image -->
-          <li class="user-header bg-primary">
+    <li class="nav-item dropdown user-menu">
+      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <img src="{{ user.profile.profile.url }}" class="user-image img-circle elevation-2" alt=".">
+        <span class="d-none d-md-inline"> {{ user }}</span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        <!-- User image -->
+        <li class="user-header bg-primary">
           <img src="{{ user.profile.profile.url }}" class="img-circle elevation-2" alt="User Image">
-    
+
           <p>
             {{ user }}
             <small>Member since {{ request.user.date_joined|naturaltime }}</small>
           </p>
-          </li>
-          <!-- Menu Body -->
-          <li class="user-body">
+        </li>
+        <!-- Menu Body -->
+        <li class="user-body">
           <div class="row">
             <div class="col-6 text-center">
               {% for group in user.groups.all %}
-            <a style="text-transform: uppercase;" href="#">{{ group.name }}</a>
-            {% endfor %}
-            </div> 
-            <div class="col-3 text-center">
-            <a href="{% url 'reset' %}" class=""  title="change password">
-              <i class="text-danger fa fa-key" ></i>
-            </a>
+              <small>
+
+                <a style="text-transform: uppercase;" href="#">{{ group.name }} Group</a>
+              </small>
+              {% endfor %}
             </div>
+            {% if perms.auth %}
             <div class="col-3 text-center">
-            <a href="#" title="View logs" >logs</a>
+              <a href="{% url 'reset' %}" class="" title="change password">
+                <i class="text-danger fa fa-key"></i>
+              </a>
             </div>
+            {% endif %}
+
+            {% if user.is_superuser %}
+            <div class="col-3 text-center">
+              <a href="/admin" title="View logs">HLA</a>
+            </div>
+            {% endif %}
+
           </div>
           <!-- /.row -->
-          </li>
-          <!-- Menu Footer-->
-          <li class="user-footer">
+        </li>
+        <!-- Menu Footer-->
+        <li class="user-footer">
+          {% if perms.accounts.view_profile %}
           <a href="{% url 'profile' %}" class="btn btn-default btn-flat">Profile</a>
+          {% endif %}
           <a href="{% url 'logout' %}" class="btn btn-default btn-flat float-right">Sign out</a>
-          </li>
-        </ul>
-        </li> 
-{% endif %}
+        </li>
+      </ul>
+    </li>
+    {% endif %}
 
 
-    </ul>
-  </nav>
-  <!-- /.navbar -->
+  </ul>
+</nav>
+<!-- /.navbar -->

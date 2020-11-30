@@ -1,12 +1,14 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-User=settings.AUTH_USER_MODEL
+User = settings.AUTH_USER_MODEL
+
 
 class Member(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE,related_name='member',unique=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='member', unique=True)
     is_member = models.BooleanField(default=False)
-    has_fine = models.BooleanField(default=False,blank=True,null=True)
+    has_fine = models.BooleanField(default=False, blank=True, null=True)
 
     class Meta:
         db_table = 'members'
@@ -16,6 +18,12 @@ class Member(models.Model):
 
     def delete(self):
         return reverse('member:delete', kwargs={'id': self.id})
+
+    def activate(self):
+        return reverse('member:activate', kwargs={'id': self.id})
+
+    def payloan(self):
+        return reverse('member:payloan', kwargs={'id': self.id})
 
 # class Member(models.Model):
 #     firstname = models.CharField(max_length=255, blank=True, null=True)

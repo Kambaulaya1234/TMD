@@ -8,4 +8,9 @@ class Index(LoginRequiredMixin,View):
     def get(self,request,*args,**kwargs):
         template_name='admin_dashboard.html'
         return render(request,template_name)
+    
+class NormalDashboard(LoginRequiredMixin,View):
+    def get(self,request,*args,**kwargs):
+        template_name='normal_dashboard.html'
+        return render(request,template_name)
 
