@@ -46,7 +46,7 @@ class CreateShareForm(forms.ModelForm):
             'jamii': forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Enter Your user...",
+                    "placeholder": "Enter Your jamii...",
                     "style": "border-radius:50px",
                 }
             ),

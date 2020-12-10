@@ -21,8 +21,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # ==================Custom App======================
-    'home','accounts','administrator','share',
-    'member','loan','balance','report',
+    'home', 'accounts', 'administrator', 'share',
+    'member', 'loan', 'balance', 'report',
 
     'administrator.src.admin_group',
     'administrator.src.admin_user',
@@ -73,21 +73,21 @@ WSGI_APPLICATION = 'TMD.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tmd',
-        'USER': 'conic',
-        'PASSWORD': '0852'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tmd',
+#         'USER': 'conic',
+#         'PASSWORD': '0852'
+#     }
+# }
 
 
 # Password validation
@@ -122,11 +122,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
-
 
 # media files (Uploaded  Images etc  Imagefield or file from ImageField)
 MEDIA_URL = '/media/'

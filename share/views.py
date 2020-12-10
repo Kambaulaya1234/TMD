@@ -6,6 +6,8 @@ from django.contrib import messages
 from django import forms
 from django.core.paginator import Paginator
 from datetime import datetime
+from member.models import Member
+from openpyxl import load_workbook
 
 
 class IndexView(View):
@@ -112,3 +114,41 @@ class ActiveYearView(View):
             'form': form,
         }
         return render(request, template_name, context)
+
+
+class HandleUploadedFileView(View):
+    def post(self, *args, **kwargs):
+        _share_file = self.request.FILES['file']
+        workbook = load_workbook(_share_file.file)
+        sheet = workbook.active
+        for row in sheet.iter_rows(min_row=11, values_only=True):
+            _created, _status = self.create_member_from_file(*row)
+            if _status:
+                messages.success(self.request, 'Share uploaded successfully!')
+            else:
+                messages.error(
+                    self.request, f'member "{_created}" is not found in member list!')
+        return redirect('share:index')
+
+    def create_member_from_file(self, member_entry, year_entry, month_entry, week_entry, hisa, jamii):
+        _member = Member.objects.filter(
+            user__username__contains=member_entry).distinct()
+        if _member.exists():
+            _year, info = YearModel.objects.get_or_create(name=year_entry)
+            _month, info = MonthModel.objects.get_or_create(
+                name=month_entry, year__name=year_entry)
+            _week, info = WeekModel.objects.get_or_create(
+                name=week_entry, month=_month, year=_year)
+
+            context = {
+                'member': _member[0], 'week': _week, 'month': _month,
+                'year': _year, 'hisa': hisa, 'jamii': jamii
+            }
+
+            _share, info = Share.objects.get_or_create(**context)
+            if(_share.hisa < 1 or _share.jamii < 5000):
+                _share.member.has_fine = True
+                _share.member.save()
+            return (member_entry, True)
+        else:
+            return (member_entry, False)

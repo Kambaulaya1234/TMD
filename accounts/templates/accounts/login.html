@@ -1,25 +1,24 @@
-{% extends 'layouts/base.html ' %}
+{% extends 'layouts/base.html' %}
 {% load static%}
 {% block content %}
 
 <div class="container">
-
     <div class="login-box">
         <div class="card">
             {% include 'layouts/partials/inc/msg.html' %}
- 
             <div class="card-body login-card-body">
-
                 <div class=" text-center text-uppercase ">
-                    <img src="{% static 'logo/logo.png' %}" alt="." width="60px"> <br><br>
-                    <img src="{% static 'logo/word.png' %}" alt="." width="100px"> <br><br>
+                    <br><br>
+                    <!-- <img src="{% static 'administrator/dist/img/logo.png' %}" alt="." width="60px"> <br><br> -->
+                    <!-- <img src="{% static 'administrator/dist/img/word.png' %}" alt="." width="120px"> <br><br> -->
+                    <img src="{% static 'administrator/dist/img/login.png' %}" alt="." width="120px"> <br><br>
                 </div>
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Welcome to Atlais</p>
 
                 <form action="{% url 'login' %}" method="POST">
                     {% csrf_token %}
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="username" placeholder="Email">
+                        <input type="text" class="form-control" name="username" placeholder="Enter username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -27,7 +26,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Password">
+                        <input type="password" class="form-control" name="password" placeholder="Enter Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -43,40 +42,41 @@
                                 </label>
                             </div>
                         </div>
-                        <!-- /.col -->
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
-                        <!-- /.col -->
                     </div>
                 </form>
 
-                <!-- <div class="social-auth-links text-center mb-3">
+                <div class="social-auth-links text-center mb-3">
                     <p>- OR -</p>
-                    <a href="#" class="btn btn-block btn-primary">
+                    <!-- <a href="#" class="btn btn-block btn-primary">
                         <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                    </a>
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                    </a>
-                </div> -->
-                <!-- /.social-auth-links -->
+                    </a> -->
+                    <button disabled href="#" class="btn btn-block btn-primary">
+                        <i class="fab  fa-google mr-2"></i> Sign in using Google Account
+                    </button>
+                </div>
 
-                <p class="mb-1">
+                <!-- <p class="mb-1">
                     <a href="forgot-password.html">I forgot my password</a>
-                </p>
-               
+                </p> -->
+                <small class="mb-1 text-danger">
+                    <strong>Note:</strong> Tegemeo Microfinance Database system is still under <strong>constructions</strong>,please consider
+                    only <strong>DEMO credentials</strong> provided <br>
+                    <div class="text-center">
+                        ---------------------------------- <br>
+                        Team Atlais
+                        <!-- Cuthbert Cornel <br>
+                    <small>Managing Director</small> -->
+                    </div>
+
+                </small>
             </div>
-            <!-- /.login-card-body -->
         </div>
     </div>
 
 </div>
 <br><br><br>
-
-
-
-
-
 
 {% endblock%}

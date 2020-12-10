@@ -1,11 +1,7 @@
 {% extends 'admin_layouts/administrator.html'%}
 {% load static %}
-{% block title %} administrator | jb {% endblock%}
+{% block title %} administrator | TMD {% endblock%}
 {% block content %}
-
-
-
-
 
 <div class="content-header">
   <div class="container-fluid">
@@ -21,11 +17,9 @@
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </div>
-  <!-- /.content-header -->
-
-
+  
   <div class="container">
-    {% if  users.count  %}
+    {% if  users  %}
 
     <div class="card">
       <div class="card-header border-transparent">
@@ -39,8 +33,6 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-
-
 
       </div>
       <!-- /.card-header -->
@@ -98,9 +90,6 @@
 
                 </td>
               </tr>
-
-
-
               <!-- Create Modal -->
               <div class="modal fade" id="deleteuser{{ user.id }}" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -204,11 +193,13 @@
         <!-- /.table-responsive -->
       </div>
       <!-- /.card-body -->
+      {% if perms.auth.add_user %}
       <div class="card-footer clearfix">
         <!-- <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-left">View Inactive users</a> -->
         <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
           class="btn btn-sm btn-info float-right">Create users</a>
       </div>
+      {% endif %}
 
 
 

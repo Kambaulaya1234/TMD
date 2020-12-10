@@ -114,13 +114,15 @@
           </a>
         </div>
       </div>
-      <!-- ./col -->
       <div class="col-lg-4 col-4">
-        <!-- small card -->
         <div class="small-box bg-danger">
           <div class="inner">
+            {% if balance.total %}
             <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>
-
+            {% else %}
+            <h5>TZS <strong>0 </strong>/=</h5>
+            
+            {% endif %}
             <p> <strong>Total amount </strong></p>
           </div>
           <div class="icon">

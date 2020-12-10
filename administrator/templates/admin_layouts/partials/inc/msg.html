@@ -1,116 +1,42 @@
-{% load static %}
-
-
 {% if messages %}
 {% for message in messages %}
-
-<!-- --------------------------------success--------------------------------------------------------------------- -->
 <br>
-<div class="container">
+<div class="container">  
+<!-- --------------------------------success--------------------------------------------------------------------- -->
 {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-<div id="msg" class="alert alert-{{ message.tags }}" role="alert">
+
+<div class="alert alert-{{ message.tags }} ">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
     <span class="icon"><i class="fa fa-check"></i></span>
-
-
     <strong>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        Error:
-        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} Success:
-        {% else %}
         {{massage.tags| title}}
-
-        {% endif%}
     </strong>
-    {{message}}
+     {{message}}
 </div>
 
-
 <!-- --------------------------------warning--------------------------------------------------------------------- -->
-
 {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-<div id="msg" class="alert alert-{{ message.tags }}">
-    <a  class="close" data-dismiss="alert" aria-label="close" title="close" href="#">×</a>
-    <span class="icon"><i class="fa  fa-warning"></i></span>
-
-
+<div class="alert alert-{{ message.tags }} ">
+    <a class="close" data-dismiss="alert" aria-label="close" title="close" href="#">×</a>
+    <span class="icon"><i class="fa fa-exclamation-circle"></i></span>
     <strong>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        Error:
-        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} Success:
-        {% else %}
         {{massage.tags| title}}
-
-        {% endif%}
     </strong>
-    {{message}}
+     {{message}}
 </div>
 
 <!-- --------------------------------error--------------------------------------------------------------------- -->
-
 {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-<div id="msg" class="alert alert-{{ message.tags }} ">
+<div class="alert alert-{{ message.tags }} ">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-    <span class="icon"><i class="fa  fa-times"></i></span>
-
-
+    <span class="icon"><i class="fa fa-times"></i></span>
     <strong>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        Error:
-        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} Success:
-        {% else %}
-        {{massage.tags| title}}
-
-        {% endif%}
+        {{massage.tags|title}}
     </strong>
-    {{message}}
-</div>
-
-
-{% else %}
-<div id="msg" class="alert alert-{{ message.tags }}">
-
-    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-    <span class="icon"><i class="fa fa-exclamation"></i></span>
-
-    <strong>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        Error:
-        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} Success:
-        {% else %}
-        {{massage.tags| title}}
-
-        {% endif%}
-    </strong>
-    {{message}}
+     {{message}}
 </div>
 
 {% endif %}
-
-
-
-{% endfor %} 
-
+{% endfor %}
 </div>
-
 {% endif %}
-
-<script src="{% static 'administrator/plugins/jquery/jquery.min.js' %} "></script>
-
-<script type="text/javascript">
-    $('#msg').hide().fadeIn(300)
-   
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000
-      });
-      
-      Toast.fire({
-        type: 'success',
-        title: $('#success').val()
-      })
-    
-    
-    </script>

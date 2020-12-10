@@ -6,6 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from loan.models import Loan
 from share.models import Share, WeekModel, YearModel
+import random
+import string
+from accounts.models import Profile
+from openpyxl import load_workbook
 
 
 class IndexView(View):
@@ -74,7 +78,7 @@ class BaseObject:
 
 class RemoveView(View, BaseObject):
     def get(self, *args, **kwargs):
-        self.get_object(kwargs['id']).delete()
+        self.get_object(kwargs['id'])[0].user.delete()
         messages.success(self.request, 'member deleted successfully!')
         return redirect('member:index')
 
@@ -88,3 +92,81 @@ class PayLoanView(View, BaseObject):
         messages.success(
             self.request, f'member {member.user} assigned loan  successfully!')
         return redirect('loan:index')
+
+
+class CreateMemberView(View):
+    @property
+    def passcode(self):
+        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+
+    def post(self, *args, **kwargs):
+        context = {
+            'username': self.request.POST['first_name'].lower(),
+            'first_name': self.request.POST['first_name'],
+            'last_name': self.request.POST['last_name'],
+            'email': self.request.POST['email'],
+            'password': f'{self.passcode}'
+        }
+        if not User.objects.filter(username=context['username']).exists():
+            _phone = self.request.POST['phone']
+            _user = User.objects.create_user(**context)
+            # _group=Group.objects.filter(id=group_id)
+            # _user.groups.set(_group)
+            Profile.objects.create(user=_user, phone=_phone, is_member=True)
+            _member = Member.objects.create(user=_user, is_member=True)
+
+            messages.success(
+                self.request, f'member {_user} created   successfully!')
+        else:
+            messages.error(
+                self.request, f"Member {context['username']} already exists!")
+        return redirect('member:index')
+
+
+class ImportMemberView(View):
+    def post(self, *args, **kwargs):
+        _member_file = self.request.FILES['file']
+        workbook = load_workbook(_member_file.file)
+        sheet = workbook.active
+        for row in sheet.iter_rows(min_row=11, values_only=True):
+            _create = self.create_member_from_file(*row)
+        return redirect('member:index')
+
+    @property
+    def passcode(self):
+        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
+
+    def create_member_from_file(self, firstname, lastname, email, phone):
+        context = {
+            'username': firstname.lower(),
+            'first_name': firstname,
+            'last_name': lastname,
+            'email': email,
+            'password': f'{self.passcode}'
+        }
+        if not User.objects.filter(username=context['username']).exists():
+            _phone = phone
+            _user = User.objects.create_user(**context)
+            # _group=Group.objects.filter(id=group_id)
+            # _user.groups.set(_group)
+            Profile.objects.create(user=_user, phone=_phone, is_member=True)
+            _member = Member.objects.create(user=_user, is_member=True)
+
+            messages.success(
+                self.request, f'member {_user} created   successfully!')
+        else:
+            messages.error(
+                self.request, f"Member {context['username']} already exists!")
+        return redirect('member:index')
+
+
+class MemberProfileView(View, BaseObject):
+    template_name = 'members/member_profile.html'
+
+    def get(self, *args, **kwargs):
+        MEMBER_ID = kwargs.get('id')
+        _member = self.get_object(MEMBER_ID)[0]
+        context = {
+            'member': _member,
+        }
+        return render(self.request, self.template_name, context)

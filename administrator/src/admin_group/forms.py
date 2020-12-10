@@ -14,7 +14,7 @@ class GroupCreateForm(forms.ModelForm):
             'name':forms.TextInput(
                 attrs={
                 'class':"form-control",
-                'placeholder':"Enter The name of your group",
+                'placeholder':"Enter The name of your Orbit",
                 }
             )
         }

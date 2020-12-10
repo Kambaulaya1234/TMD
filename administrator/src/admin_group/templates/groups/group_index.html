@@ -1,6 +1,6 @@
 {% extends 'admin_layouts/administrator.html'%}
 {% load static %}
-{% block title %} administrator | icaretechnology {% endblock%}
+{% block title %} administrator | TMD {% endblock%}
 {% block content %}
 
 <div class="container">
@@ -11,7 +11,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Group Panel </h1>
+        <h1 class="m-0 text-dark">Orbit Panel </h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -26,14 +26,16 @@
 
     <div class="card">
       <div class="card-header border-transparent">
-        <h3 class="card-title">Group Lists</h3>
+        <h3 class="card-title">Orbital Lines</h3>
 
         <div class="card-tools" >
           <!-- <button type="button" class="btn btn-tool" data-widget="collapse">
             <i class="fas fa-minus"></i>
           </button> -->
             <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
-            class="btn btn-sm btn-info float-right">Create Group</a>
+            class="btn btn-sm btn-info float-right">
+            <i class="fa  fa-plus-circle"></i>
+            Create Orbit</a>
         
         </div>
 
@@ -46,8 +48,8 @@
           <table class="table m-0">
             <thead>
               <tr>
-                <th>Group ID</th>
-                <th>Group</th>
+                <th>Orbit ID</th>
+                <th>Orbit</th>
                 <th>Status</th>
                 <th>#Permissions</th>
                 <th>Actions</th>
@@ -90,7 +92,7 @@
               <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    Delete Group
+                    Delete Orbit
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -98,11 +100,11 @@
                   <div class="modal-body">
                     <form action="{% url 'administrator:remove_group' group.id  %}">
                       {% csrf_token %}
-                      <p>Are Your Sure? Delete <strong style="color: red;">{{ group.name }} Group</strong>?</p>
+                      <p>Are Your Sure? Delete <strong style="color: red;">{{ group.name }} Orbit</strong>?</p>
 
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Group </button>
+                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Orbit </button>
                       </div>
                   </div>
                   </form>
@@ -118,7 +120,7 @@
               <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    Edit Group
+                    Edit Orbit
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -203,7 +205,7 @@
 </div>
 {% else %}
 <div class="jumbotron text-center text-info">
-  <h5> <i class="fa fa-exclamation-triangle"></i> No any Group Found</h5>
+  <h5> <i class="fa fa-exclamation-triangle"></i> No any Orbit Found</h5>
   or <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"> Create Now</a>
 </div>
 {% endif %}
@@ -215,7 +217,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Create Group</h4>
+        <h4 class="modal-title">Create Orbit</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

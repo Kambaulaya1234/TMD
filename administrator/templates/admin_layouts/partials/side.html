@@ -2,7 +2,7 @@
 {% load base %}
 <aside class=" main-sidebar elevation-4 sidebar-light-primary">
   <a href="{% url 'administrator:index' %}" class="brand-link navbar-white">
-    <img src="{% static 'logo/atlais.png' %}" alt="." class="brand-image " style="opacity: .8" width="10px">
+    <img src="{% static 'administrator/dist/img/atlais.png' %}" alt="." class="brand-image " style="opacity: .8" width="10px">
     <!-- <span class="brand-text font-weight-light">The Atlais</span> -->
   </a>
   <div class="sidebar">
@@ -10,19 +10,9 @@
       <div class="image">
         <!-- <img src="{{ user.profile.profile.url }}" class="img-circle " alt="."> -->
       </div>
-      <div class="info ">
-        <div class="row">
-          
-          
-          <a href="{% url 'administrator:normal' %}" class="d-block" style="text-transform: uppercase;font-weight:900" >
-            <i class="nav-icon fas fa-home"></i>
-            TMD SYSTEM</a>
-        
-        </div>
-      </div>
+      
+      <strong><i class="nav-icon fas fa-home"></i> TEGEMEO GROUP</strong>
     </div>
-
-    <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item has-treeview ">
@@ -48,7 +38,7 @@
                 <p class="text">Admin Dashboard</p>
               </a>
             </li>
-            
+
             <!-- <li class="nav-item">
               <a href="{% url 'administrator:normal' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
@@ -69,9 +59,9 @@
 
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link ">
-            <i class="nav-icon fa fa-paw"></i>
+            <i class="nav-icon fab fa-rebel"></i>
             <p>
-              Groups
+              Orbit
               <i class="fas fa-angle-left right"></i>
               <span class="badge badge-info right">{% group_count %}</span>
             </p>
@@ -119,7 +109,7 @@
             <p>
               Members
               <i class="fas fa-angle-left right"></i>
-              <span class="badge badge-info right">{% user_count %}</span>
+              <!-- <span class="badge badge-info right">{% user_count %}</span> -->
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -214,16 +204,17 @@
           </ul>
         </li> -->
 
-
+        {% if pe or perms.share or perms.loan or perms.balance %}
         <li class="nav-header">Management </li>
+        {% endif %}
         {% if perms.share %}
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
             <i class="nav-icon fa  fa-bars"></i>
             <p>
-              Share|Hisa|Kuku
+              Share
               <i class="fas fa-angle-left right"></i>
-              <span class="badge badge-info right">12</span>
+              <!-- <span class="badge badge-info right">12</span> -->
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -231,11 +222,11 @@
             <li class="nav-item">
               <a href="{% url 'share:index' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
-                <p class="text">Active Share list</p>
+                <p class="text">Active List</p>
               </a>
             </li>
             {% endif %}
-            {% if perms.share.view_weekmodel %}
+            <!-- {% if perms.share.view_weekmodel %}
             <li class="nav-item">
               <a href="{% url 'share:weeks' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
@@ -258,7 +249,7 @@
                 <p class="text">Active Year</p>
               </a>
             </li>
-            {% endif %}
+            {% endif %} -->
 
           </ul>
         </li>
@@ -285,6 +276,13 @@
                 <p class="text">Loan list</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="{% url 'loan:complete' %}" class="nav-link">
+                <i class="nav-icon far fa-circle text-primary"></i>
+                <p class="text">paid Loans</p>
+              </a>
+            </li>
+
             {% endif %}
 
 

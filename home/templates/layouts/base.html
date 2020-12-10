@@ -2,16 +2,15 @@
 <html lang="en">
 
 <head>
-    {% load static %}
-    <!-- Required Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  {% load static %}
+  <!-- Required Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title> Tegemeo </title>
 
-    <!-- Page Title -->
-    <title> JOB RECRUITMENT </title>
+  <link href="{% static 'administrator/dist/img/logo.png' %}" rel="shortcut icon" />
 
-    <link rel="shortcut icon" href="{% static 'assets/images/logo/favicon.png' %}" type="image/x-icon">
   <link rel="stylesheet" href="{% static 'administrator/plugins/fontawesome-free/css/all.css' %}">
   <link rel="stylesheet" href="{% static 'administrator/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
   <link rel="stylesheet" href="{% static 'administrator/plugins/summernote/summernote-bs4.css' %}">
@@ -23,15 +22,15 @@
 </head>
 
 <body>
-    <!-- Preloader Starts -->
-    <div class="preloader">
-        <div class="spinner"></div>
-    </div>
-    {% if not 'login' in request.path %}
-    {% include 'layouts/partials/inc/msg.html' %}
-    {% endif %}
-    
-    {% block content %} {% endblock %}
+  <!-- Preloader Starts -->
+  <div class="preloader">
+    <div class="spinner"></div>
+  </div>
+  {% if not 'login' in request.path %}
+  {% include 'layouts/partials/inc/msg.html' %}
+  {% endif %}
+
+  {% block content %} {% endblock %}
 
 
 
@@ -60,22 +59,22 @@
     $(function () {
       //Initialize Select2 Elements
       $('.select2').select2()
-  
+
       //Initialize Select2 Elements
       $('.select2bs4').select2({
         theme: 'bootstrap4'
       })
-  
+
       //Datemask dd/mm/yyyy
       $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
       //Datemask2 mm/dd/yyyy
       $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
       //Money Euro
       $('[data-mask]').inputmask()
-  
+
       //Date range picker
       $('#reservationdate').datetimepicker({
-          format: 'L'
+        format: 'L'
       });
       //Date range picker
       $('#reservation').daterangepicker()
@@ -90,43 +89,43 @@
       //Date range as a button
       $('#daterange-btn').daterangepicker(
         {
-          ranges   : {
-            'Today'       : [moment(), moment()],
-            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
             'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
           },
           startDate: moment().subtract(29, 'days'),
-          endDate  : moment()
+          endDate: moment()
         },
         function (start, end) {
           $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         }
       )
-  
+
       //Timepicker
       $('#timepicker').datetimepicker({
         format: 'LT'
       })
-      
+
       //Bootstrap Duallistbox
       $('.duallistbox').bootstrapDualListbox()
-  
+
       //Colorpicker
       $('.my-colorpicker1').colorpicker()
       //color picker with addon
       $('.my-colorpicker2').colorpicker()
-  
-      $('.my-colorpicker2').on('colorpickerChange', function(event) {
+
+      $('.my-colorpicker2').on('colorpickerChange', function (event) {
         $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
       });
-  
-      $("input[data-bootstrap-switch]").each(function(){
+
+      $("input[data-bootstrap-switch]").each(function () {
         $(this).bootstrapSwitch('state', $(this).prop('checked'));
       });
-  
+
     })
   </script>
 </body>

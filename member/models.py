@@ -24,6 +24,11 @@ class Member(models.Model):
 
     def payloan(self):
         return reverse('member:payloan', kwargs={'id': self.id})
+    
+    def get_profile(self):
+        return reverse('member:profile', kwargs={'id': self.id})
+        
+
 
 # class Member(models.Model):
 #     firstname = models.CharField(max_length=255, blank=True, null=True)

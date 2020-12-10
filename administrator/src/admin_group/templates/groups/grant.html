@@ -1,70 +1,53 @@
 {% extends 'admin_layouts/administrator.html'%}
 {% load static %}
-{% block title %} administrator | icaretechnology {% endblock%}
+{% block title %} administrator | TMD {% endblock%}
 {% block content %}
-
-
-
-
-
 
 
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Group Panel </h1>
-      </div><!-- /.col -->
+        <h1 class="m-0 text-dark">Orbit Panel </h1>
+      </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Group</li>
+          <li class="breadcrumb-item active">Orbit</li>
         </ol>
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
-
-  <div class="container">
-    <br><br>
-
-    <div class="card card-warning">
-      <div class="card-header">
-        <h3 style="text-transform: uppercase;" class="card-title">Grant Acces To {{ group.name }} Group </h3>
       </div>
     </div>
-    <!-- /.card-header -->
+  </div>
+  <div class="container">
+    <br><br>
+    <div class="card card-warning">
+      <div class="card-header">
+        <h3 style="text-transform: uppercase;" class="card-title">Grant Acces To {{ group.name }} Orbit </h3>
+      </div>
+    </div>
     <div class="card-body">
-
-      <!-- text input -->
-      <div class="form-group" >
+      <div class="form-group">
         <label>Group Name</label>
         <input type="text" class="form-control" placeholder="Enter ..." value="{{ group.name }}">
       </div>
-
       <!-- textarea -->
-      <div class=" textarea" style="height: 200;" >
-      </div>
-
+      <!-- <div class="textarea" style="height: 200;" >
+      </div> -->
+      <br>
       <div>
         {% for permission in permissions %}
         <form role="form" action="{% url 'administrator:grant_access' group.id  %}" method="POST">
           {% csrf_token %}
-
-
           <div class="form-group ">
             {% if permission in group.permissions.all  %}
             {% ifchanged permission.content_type %}
             <p style="text-transform: uppercase;"> Permission Based on <strong style="color: brown;">
                 {{ permission.content_type }}</strong>
             </p>
-
             {% endifchanged %}
             <hr>
             <div class="text-center">
-
               <div class="">
-
                 <div class="custom-control custom-switch   custom-switch-on-success   custom-switch-off-danger ">
                   <input type="checkbox" class="custom-control-input" id="{{ permission.id }}"
                     name="{{ permission.codename }}" value="{{ permission.id }}" checked>
@@ -79,7 +62,6 @@
             </p>
             {% endifchanged %}
             <div class="text-center">
-
               <div class="">
                 <hr>
                 <div class="custom-control custom-switch   custom-switch-on-success   custom-switch-off-danger ">
@@ -89,32 +71,17 @@
                 </div>
               </div>
             </div>
-
             {% endif %}
-
           </div>
           {% endfor %}
       </div>
       <hr>
-
       <div class="text-center ">
         <button type="submit" style="text-transform: uppercase;" class="btn btn-primary btn-sm">
-          <i class="fa fa-eye"> </i> Grant all selected permissions TO {{ group.name }} group </button>
+          <i class="fa fa-eye"> </i> Grant all selected permissions TO {{ group.name }} Orbit </button>
       </div>
-
-
-
-
       </form>
     </div>
-    <!-- /.card-body -->
   </div>
-
 </div>
-
-
-
-
-
-
 {% endblock  %}

@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>TMD Members</h1>
+                <h1>Tegemeo Members</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -16,6 +16,7 @@
         </div>
     </div><!-- /.container-fluid -->
 </section>
+{% if members %}
 
 <section class="content">
 
@@ -25,17 +26,24 @@
             <div class="row justify-content-between">
                 <h3 class="card-title">Active Members List </h3>
                 <div class="float-right">
+                    {% if perms.member.add_member%}
                     <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createMember">Create
                         Member</a>
 
-                    <!-- <a href="#" class="btn btn-warning btn-sm">
-                        <label for="import"> Import Excel(.xls)</label></a>
-                    <input style="display: none;" type="file" class="btn btn-primary btn-sm" id="import">
-                    <a href="#" class="btn btn-primary btn-sm">
+                    <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                        Import From File
+                    </a>
+                    {% endif %}
+
+
+                    <!-- <a href="#" class="btn btn-primary btn-sm">
                         Export Excel(.xls) </a> -->
                 </div>
             </div>
         </div>
+
+
+
         <div class="card-body p-0">
             <table class="table table-striped projects">
                 <thead>
@@ -112,34 +120,30 @@
                             <span class="badge badge-danger">Inactive</span>
                             {% endif %}
                         </td>
-                        <!-- <td class="project_progress">
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
-                                    aria-volumemin="0" aria-volumemax="100" style="width: 57%">
-                                </div>
-                            </div>
-                            <small>
-                                57% Complete
-                            </small>
-                        </td> -->
-                        <!-- <td class="project-state">
-                            <span class="badge badge-success">Success</span>
-                        </td> -->
+
                         <td class="text-center">
-                            <a class="btn btn-primary btn-sm" href="#">
+                            {% if perms.member.view_member %}
+
+                            <a class="btn btn-primary btn-sm" href="{{ member.get_profile }}" title="View Profile">
                                 <i class="fas fa-eye">
                                 </i>
                             </a>
-                            <a class="btn btn-success btn-sm" href="#" title="View Profile" data-toggle='modal'
+                            {% endif %}
+                            {% if perms.loan.add_loan%}
+
+                            <a class="btn btn-success btn-sm" href="#" title="Pay Loan" data-toggle='modal'
                                 data-target="#loan{{ member.id }}">
                                 <i class="fa fa-align-center">
                                 </i>
                             </a>
+                            {% endif %}
+                            {% if perms.member.delete_member%}
                             <a class="btn btn-danger btn-sm" href="#" data-toggle='modal'
                                 data-target="#deleteShare{{ member.id }}">
                                 <i class="fas fa-trash">
                                 </i>
                             </a>
+                            {% endif %}
                         </td>
                     </tr>
 
@@ -198,7 +202,8 @@
                                                     placeholder="Enter Loan Amount" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="deadline">When will {{ member.user|title }} return Loan?</label>
+                                                <label for="deadline">When will {{ member.user|title }} return
+                                                    Loan?</label>
                                                 <input class="form-control" type="date" name="deadline" id="deadline"
                                                     placeholder="Enter Deadline Amount" required>
                                             </div>
@@ -234,31 +239,116 @@
 
 
 
-    <div class="modal fade" id="createMember">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Create Member</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{% url 'member:index' %}" method="POST">
-                    <div class="modal-body">
+    
 
-                        <div class="form-group">
-                            {% csrf_token %}
-                            {{ form.as_p }}
 
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Create Member</button>
-                    </div>
-                </form>
+
+</section>
+{% else %}
+<div class="jumbotron text-center">
+    <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
+        <hr>
+        
+        <h6>No Members Added Yet</h6>
+        <hr>
+        <small>
+            {% if perms.member.add_member%}
+            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createMember">Create
+                Member</a>
+or 
+            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                Import From File
+            </a>
+            {% endif %}
+        </small>
+    </div>
+</div>
+{% endif %}
+
+
+
+<div class="modal fade" id="createMember">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Member</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <form action="{% url 'member:create' %}" method="POST">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" name="first_name" id="first_name" class="form-control"
+                                placeholder="Enter first name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" name="last_name" id="last_name" class="form-control"
+                                placeholder="Enter last name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" class="form-control"
+                                placeholder="Enter Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" name="phone" id="phone" class="form-control"
+                                placeholder="Enter phone Number">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Create Member</button>
+                </div>
+            </form>
         </div>
     </div>
-</section>
+</div>
+
+
+
+<div class="modal fade" id="upload{{ member.id }}" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Import Panel
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'member:upload' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">Choose Format</label>
+                        <select name="choice" class="form-control">
+                            <option value="0" disabled>---choose format---</option>
+                            <option value="1" selected>Excel(.xlsx)</option>
+                            <option value="2" disabled class="text-muted">CSV</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="import">Choose File</label><br>
+                        <input required type="file" name="file" class="btn btn-primary btn-sm form-control" id="import">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success btn-sm">Upload Now
+                        </button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

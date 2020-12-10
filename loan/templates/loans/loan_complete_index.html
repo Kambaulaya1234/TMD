@@ -1,0 +1,207 @@
+{% extends 'admin_layouts/administrator.html'%} {% load static %}
+{% block title%} share | TMD {% endblock%}
+{% block content %}
+{% load humanize %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Loans</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">loan</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+{% if Loans %}
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <div class="row justify-content-between">
+                <h3 class="card-title"> Loan List</h3>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped ">
+                <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Loan
+                        </th>
+                        <th>
+                            Profit
+                        </th>
+                        <th>
+                            Insurance
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                        Paid
+                        </th>
+                        <th>
+                            starting
+                        </th>
+                        <th>
+                            Deadline
+                        </th>
+                        <th>
+                            Status
+                        </th>
+
+                        <th class="text-center">
+                            Actions
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in Loans %}
+                    <tr>
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+                        <td>
+                            <a>
+                                <strong>{{ loan.member|title }}</strong>
+                            </a>
+                            <br>
+                        </td>
+                        <td>
+                            {{ loan.amount|intword|intcomma }}
+                        </td>
+                        <td>
+                            {{ loan.profit_amount|intword|intcomma }}
+                        </td>
+                        <td>
+                            {{ loan.insurance|intword|intcomma }}
+                        </td>
+                        <td>
+                            {{ loan.total|intword|intcomma }}
+                        </td>
+                        <td>
+                            {{ loan.paid|intword|intcomma }}
+                        </td>
+                        <td>
+                            {{ loan.created_at }}
+                        </td>
+                        <td>
+                            {{ loan.deadline }}
+                        </td>
+                        <td class="project_progress">
+                            {% if  loan.percent > 0.0 and loan.percent < 100 %}
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
+                                    aria-volumemin="0" aria-volumemax="100"
+                                    style="width: {{ loan.percent|floatformat:0 }}% ">
+                                </div>
+                            </div>
+                            <small>
+                                <small>{{ loan.percent|floatformat:1 }}% Complete</small>
+                            </small>
+                            {% elif loan.total  == loan.paid %}
+                            <span class="badge badge-success">Completed</span>
+                            {% else %}
+                            <span class="badge badge-danger">Incomplete</span>
+
+                            {% endif %}
+                        </td>
+
+
+                        <td class="text-center">
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle='modal' title="Remove Loan"
+                                data-target="#deleteLoan{{ loan.id }}">
+                                <i class="fas fa-trash">
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    <div class="modal fade" id="deleteLoan{{ loan.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Delete Share
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ loan.delete }}">
+                                        {% csrf_token %}
+                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ loan.member|title }}
+                                                Loan</strong>?</p>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Loan
+                                            </button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="payLoan{{ loan.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Loan Payment
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ loan.payment }}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="paid">How Much did <strong>{{ loan.member|title }}</strong> paid ?</label>
+                                            <input type="text" class="form-control" name="paid" id="paid"
+                                                placeholder="Enter Paid Amount">
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Yes? Pay Loan
+                                            </button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+</section>
+{% else %}
+<div class="jumbotron text-center">
+    <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
+        <h5>No data found at this week </h5>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -27,67 +27,105 @@
     <div class="container-fluid">
       <!-- Info boxes -->
       <div class="row">
+        {% if perms.auth.view_user  %}
+
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box">
             <span class="info-box-icon bg-info elevation-1"><i class="fas fa fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">USERS</span>
-              <span class="info-box-number">
-                {% user_count %}
-                <small>members</small>
-              </span>
+              <span class="info-box-text">Supervisors</span>
+              {% user_count as user_c %}
+              {% if user_c %}
+              <span class="info-box-number"> {% user_count %}</span>
+              {% else %}
+              <small style="color: rgb(182, 173, 173);">No Data Found</small>
+              {% endif %}
+
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+        {% endif %}
+
+
+        {% if perms.loan.view_loan  %}
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
-            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+            <span class="info-box-icon bg-danger elevation-1">$</span>
 
             <div class="info-box-content">
               <span class="info-box-text">Loans </span>
-              <span class="info-box-number">2</span>
+              {% loan_count as loan_c %}
+              {% if loan_c %}
+              <span class="info-box-number">{% loan_count %}</span>
+              {% else %}
+              <small style="color: rgb(182, 173, 173);">No Data Found</small>
+              {% endif %}
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+        {% endif %}
 
-        <!-- fix for small devices only -->
+
         <div class="clearfix hidden-md-up"></div>
-
+        {% if perms.member.view_member  %}
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
-            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
-
+            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-user-circle "></i></span>
             <div class="info-box-content">
               <span class="info-box-text">Members</span>
-              <span class="info-box-number">2</span>
+              {% member_count as member_c %}
+              {% if member_c %}
+              <span class="info-box-number">{% member_count %}</span>
+              {% else %}
+              <small style="color: rgb(182, 173, 173);">No Data Found</small>
+              {% endif %}
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+
+        {% endif %}
+
+        {% if perms.auth.view_group  %}
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa fa-paw"></i></span>
+            <span class="info-box-icon bg-warning elevation-1"><i class=" fab fa-rebel"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">GROUPS</span>
+              <span class="info-box-text">Orbit</span>
+              {% group_count as group_c %}
+              {%if group_c %}
               <span class="info-box-number">{% group_count %}</span>
+              {% else %}
+              <small style="color: rgb(182, 173, 173);">No Data Found</small>
+              {% endif %}
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+        {% endif %}
+
+        {% if perms.share.view_share  %}
+
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fa  fa-sitemap"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Share(Hisa)</span>
+              <span class="info-box-number">
+                {% all_share_count as share_c %}
+
+                {% if share_c %}
+                {% all_share_count %}
+                {% else %}
+                <small style="color: rgb(182, 173, 173);">No Data Found</small>
+                {% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+        {% endif %}
       </div>
-      <!-- /.row -->
 
     </div>
   </section>

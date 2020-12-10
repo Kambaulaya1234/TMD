@@ -37,16 +37,19 @@
                             Name
                         </th>
                         <th>
-                            Loan Amount
+                            Loan
                         </th>
                         <th>
-                            Loan Profit
+                            Profit
                         </th>
                         <th>
                             Insurance
                         </th>
                         <th>
-                            Total Amount
+                            Amount
+                        </th>
+                        <th>
+                            Paid
                         </th>
                         <th>
                             starting
@@ -89,60 +92,112 @@
                             {{ loan.total|intword|intcomma }}
                         </td>
                         <td>
+                            {{ loan.paid|intword|intcomma }}
+                        </td>
+                        <td>
                             {{ loan.created_at }}
                         </td>
                         <td>
                             {{ loan.deadline }}
                         </td>
-                        <td>
-                            {% if  loan.status %}
+                        <td class="project_progress">
+                            {% if  loan.percent > 0.0 and loan.percent < 100 %}
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
+                                    aria-volumemin="0" aria-volumemax="100"
+                                    style="width: {{ loan.percent|floatformat:0 }}% ">
+                                </div>
+                            </div>
+                            <small>
+                                <small>{{ loan.percent|floatformat:1 }}% Complete</small>
+                            </small>
+                            {% elif loan.total  == loan.paid %}
                             <span class="badge badge-success">Completed</span>
                             {% else %}
                             <span class="badge badge-danger">Incomplete</span>
-                            {% endif %}
 
+                            {% endif %}
                         </td>
 
 
                         <td class="text-center">
-                            <!-- <a class="btn btn-primary btn-sm" href="#">
-                                <i class="fas fa-folder">
+                            <a class="btn btn-primary btn-sm" href="{{ loan.show }}" title="View Details">
+                                <i class="fas fa-eye">
                                 </i>
                             </a>
-                            <a class="btn btn-info btn-sm" href="#">
-                                <i class="fas fa-pencil-alt">
+                            {% if not loan.total  == loan.paid  %}
+                            <a class="btn btn-success btn-sm" href="#" data-toggle='modal' title="Pay Loan"
+                                data-target="#payLoan{{ loan.id }}">
+                                <i class="fa fa-anchor">
                                 </i>
-                            </a> -->
-                            <a class="btn btn-danger btn-sm" href="#" data-toggle='modal'
-                                data-target="#deleteShare{{ share.id }}">
+                            </a>
+                            {% else %}
+                            <button disabled class="btn btn-secondary btn-sm" title="No action" href="">
+                                <i class="fa fa-anchor">
+                                </i>
+                            </button>
+                            {% endif %}
+
+                            <a class="btn btn-danger btn-sm" href="#" data-toggle='modal' title="Remove Loan"
+                                data-target="#deleteLoan{{ loan.id }}">
                                 <i class="fas fa-trash">
                                 </i>
                             </a>
+
                         </td>
                     </tr>
 
+                    <div class="modal fade" id="deleteLoan{{ loan.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Delete Share
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ loan.delete }}">
+                                    {% csrf_token %}
+                                    <p>Are Your Sure? Delete <strong style="color: red;">{{ loan.member|title }}
+                                            Loan</strong>?</p>
 
-                    <!-- Create Modal -->
-                    <div class="modal fade" id="deleteShare{{ share.id }}" tabindex="-1" role="dialog"
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary btn-sm"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Loan
+                                        </button>
+                                    </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                    <div class="modal fade" id="payLoan{{ loan.id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    Delete Share
+                                    Loan Payment
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ loan.delete }}">
+                                    <form action="{{ loan.payloan }}" method="POST">
                                         {% csrf_token %}
-                                        <p>Are Your Sure? Delete <strong style="color: red;">{{ loan.member|title }}
-                                                Loan</strong>?</p>
+                                        <div class="form-group">
+                                            <label for="paid">How Much did <strong>{{ loan.member|title }}</strong> paid
+                                                ?</label>
+                                            <input type="text" class="form-control" name="paid" id="paid"
+                                                placeholder="Enter Paid Amount">
+                                        </div>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary btn-sm"
                                                 data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Loan
+                                            <button type="submit" class="btn btn-success btn-sm">Yes? Pay Loan
                                             </button>
                                         </div>
                                 </div>
@@ -150,47 +205,13 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end Modal -->
-
-
-
                     {% endfor %}
 
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
     </div>
-    <!-- /.card -->
 
-
-
-    <div class="modal fade" id="createShare">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Create Share</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="{% url 'share:index' %}" method="POST">
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Create Share</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </section>
 {% else %}
 <div class="jumbotron text-center">

@@ -1,0 +1,231 @@
+{% extends 'admin_layouts/administrator.html'%}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+
+  <div class="col-md-12">
+    <!-- Widget: user widget style 1 -->
+    <div class="card card-widget widget-user">
+      <div class="widget-user-header bg-primary">
+        <h3 class="widget-user-username">{{ member.user.get_full_name }}</h3>
+        {% if member.user.groups.all%}
+        <h5 class="widget-user-desc">{{ member.user.groups.all }}</h5>
+        <!-- <h5 class="widget-user-desc">Founder &amp; CEO</h5> -->
+        {% else %}
+        Group:Not Yet Specified
+        {% endif %}
+      </div>
+
+      <div class="widget-user-image">
+        <img class="profile-user-img img-fluid img-circle" src="{{user.profile.profile.url}}" alt=".">
+      </div>
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">3,200</h5>
+              <span class="description-text">Loan</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">11</h5>
+              <span class="description-text">Share/Hisa</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4">
+            <div class="description-block">
+              <h5 class="description-header">40000</h5>
+              <span class="description-text">Insurance</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+    </div>
+    <!-- /.widget-user -->
+  </div>
+
+
+
+  <section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Balance Summary</h3>
+
+      </div>
+      <div class="card-body" style="display: block;">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
+            <div class="row">
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Credit Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">8.7mil</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Fines Amount</span>
+                    <span class="info-box-number text-center text-muted mb-0">2300/=</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Share(Hisa)</span>
+                    <span class="info-box-number text-center text-muted mb-0">20 <span>
+                      </span></span></div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Jamii</span>
+                    <span class="info-box-number text-center text-muted mb-0">20 <span>
+                      </span></span></div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Loans</span>
+                    <span class="info-box-number text-center text-muted mb-0">20 <span>
+                      </span></span></div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <div class="info-box bg-light">
+                  <div class="info-box-content">
+                    <span class="info-box-text text-center text-muted">Total amount </span>
+                    <span class="info-box-number text-center text-muted mb-0">{{ balance.total }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+            
+            <!-- <div class="row">
+              <div class="col-12">
+                <h4>Recent Activity</h4>
+                <div class="post">
+                  <div class="user-block">
+                    <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+                    <span class="username">
+                      <a href="#">Jonathan Burke Jr.</a>
+                    </span>
+                    <span class="description">Shared publicly - 7:45 PM today</span>
+                  </div>
+                  <p>
+                    Lorem ipsum represents a long-held tradition for designers,
+                    typographers and the like. Some people hate it and argue for
+                    its demise, but others ignore.
+                  </p>
+  
+                  <p>
+                    <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> Demo File 1 v2</a>
+                  </p>
+                </div>
+  
+                <div class="post clearfix">
+                  <div class="user-block">
+                    <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
+                    <span class="username">
+                      <a href="#">Sarah Ross</a>
+                    </span>
+                    <span class="description">Sent you a message - 3 days ago</span>
+                  </div>
+                  <p>
+                    Lorem ipsum represents a long-held tradition for designers,
+                    typographers and the like. Some people hate it and argue for
+                    its demise, but others ignore.
+                  </p>
+                  <p>
+                    <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> Demo File 2</a>
+                  </p>
+                </div>
+  
+                <div class="post">
+                  <div class="user-block">
+                    <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+                    <span class="username">
+                      <a href="#">Jonathan Burke Jr.</a>
+                    </span>
+                    <span class="description">Shared publicly - 5 days ago</span>
+                  </div>
+                  <p>
+                    Lorem ipsum represents a long-held tradition for designers,
+                    typographers and the like. Some people hate it and argue for
+                    its demise, but others ignore.
+                  </p>
+  
+                  <p>
+                    <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> Demo File 1 v1</a>
+                  </p>
+                </div>
+              </div>
+            </div> -->
+
+
+
+          </div>
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+  <di class="text-center">
+    <div class="col-md-6">
+      {% if user.profile.profile %}
+      <!-- <a href="#">
+                <img src="/media/{{user.profile.profile}}" height="200px" width="200px" class="img-circle">
+            </a> <br> -->
+      {% else %}
+      <a href="#">
+        <img src="/media/images/users/default/she.png" height="200px" width="200px" class="img-circle">
+      </a> <br>
+      {% endif  %}
+
+      <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} <br>
+        <div class="form-group ">
+          <label for="file">Change Profile</label>
+          <input type="file" name="upload" id="file" class="btn btn-sm btn-primary mr-4 " required>
+          <input type="hidden" name="status" value="{{request.user.profile.status }}">
+        </div>
+        <input type="submit" value="upload profile" class="btn btn-primary">
+      </form>
+    </div>
+  </di>
+</div>
+{% endblock %}

@@ -31,11 +31,10 @@
                         Share</a>
                         {% endif %}
 
-                    <!-- <a href="#" class="btn btn-warning btn-sm">
-                        <label for="import"> Import Excel(.xls)</label></a>
-                    <input style="display: none;" type="file" class="btn btn-primary btn-sm" id="import">
-                    <a href="#" class="btn btn-primary btn-sm">
-                        Export Excel(.xls) </a> -->
+                        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                            <i class="fa fa-file-excel-o"></i> Import From File
+                        </a>
+                  
                 </div>
             </div>
         </div>
@@ -104,16 +103,7 @@
                         </td>
                         <td>
                             <strong>TSH {{ share.jamii }}/=</strong>
-                            <!-- <td class="project_progress">
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
-                                    aria-volumemin="0" aria-volumemax="100" style="width: 57%">
-                                </div>
-                            </div>
-                            <small>
-                                57% Complete
-                            </small>
-                        </td> -->
+                            
                             <!-- <td class="project-state">
                             <span class="badge badge-success">Success</span>
                         </td> -->
@@ -183,8 +173,11 @@
     <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
 
         <h5>No data found at this week</h5>
-        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
-            Share</a>
+        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
+            <i class="fa fa-bars"></i> Create Share</a> or
+             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                <i class="fa fa-folder"></i> Import From File
+             </a>
     </div>
 </div>
 {% endif %}
@@ -193,8 +186,12 @@
 <div class="jumbotron text-center">
     <div class="text-center" style="border: 1px solid red;border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
         <h5>No data found at {% now 'M' %}|{% now 'Y' %}</h5>
-        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
-            Share</a>
+        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
+            <i class="fa fa-bars"></i> Create Share</a> or
+             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                <i class="fa fa-folder"></i> Import From File
+             </a>
+          
     </div>
 </div>
 
@@ -230,4 +227,51 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="upload{{ member.id }}" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Import Panel
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'share:upload' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="">Choose Format</label>
+                            <select name="choice" class="form-control"  >
+                                <option value="0"  disabled>---choose format---</option>
+                                <option value="1" selected>Excel(.xlsx)</option>
+                                <option value="2" disabled class="text-muted">CSV</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="import">Choose File</label><br>
+                            <input required type="file" name="file" class="btn btn-primary btn-sm form-control" id="import">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success btn-sm">Upload Now
+                            </button>
+                        </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
