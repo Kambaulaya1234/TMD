@@ -11,6 +11,7 @@ urlpatterns = [
     path('create/', CreateMemberView.as_view(), name='create'),
     path('upload-member/',ImportMemberView.as_view(), name='upload'),
     path('profile/<int:id>',MemberProfileView.as_view(), name='profile'),
-    path('delete/<int:id>/', RemoveView.as_view(), name='delete')
+    path('delete/<int:id>/', RemoveView.as_view(), name='delete'),
+    path('edit/<int:id>/', EditMemberView.as_view(), name='edit')
 
 ]

@@ -12,9 +12,13 @@ class Member(models.Model):
 
     class Meta:
         db_table = 'members'
+        ordering = ['-id']
 
     def __str__(self):
         return f'{self.user}'
+
+    def edit(self):
+        return reverse('member:edit', kwargs={'id': self.id})
 
     def delete(self):
         return reverse('member:delete', kwargs={'id': self.id})
@@ -24,10 +28,9 @@ class Member(models.Model):
 
     def payloan(self):
         return reverse('member:payloan', kwargs={'id': self.id})
-    
+
     def get_profile(self):
         return reverse('member:profile', kwargs={'id': self.id})
-        
 
 
 # class Member(models.Model):

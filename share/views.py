@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 from datetime import datetime
 from member.models import Member
 from openpyxl import load_workbook
+from django.core.files.base import ContentFile
 
 
 class IndexView(View):
@@ -50,6 +51,10 @@ class BaseObject:
         share = Share.objects.filter(id=id)
         return share
 
+    def get_all(self):
+        share = Share.objects.all()
+        return share
+
 
 class Update(View, BaseObject):
     def post(self, *args, **kwargs):
@@ -68,6 +73,13 @@ class RemoveView(View, BaseObject):
     def get(self, *args, **kwargs):
         self.get_object(kwargs['id']).delete()
         messages.success(self.request, 'Share deleted successfully!')
+        return redirect('share:index')
+
+
+class RemoveAll(View, BaseObject):
+    def get(self, *args, **kwargs):
+        self.get_all().delete()
+        messages.success(self.request, 'all Share deleted successfully!')
         return redirect('share:index')
 
 
@@ -119,20 +131,26 @@ class ActiveYearView(View):
 class HandleUploadedFileView(View):
     def post(self, *args, **kwargs):
         _share_file = self.request.FILES['file']
-        workbook = load_workbook(_share_file.file)
-        sheet = workbook.active
-        for row in sheet.iter_rows(min_row=11, values_only=True):
-            _created, _status = self.create_member_from_file(*row)
-            if _status:
-                messages.success(self.request, 'Share uploaded successfully!')
-            else:
-                messages.error(
-                    self.request, f'member "{_created}" is not found in member list!')
+        if _share_file.name.endswith('.xlsx'):
+            uploaded_bytes = _share_file.file.read()
+            workbook = load_workbook(ContentFile(uploaded_bytes))
+            sheet = workbook.active
+            for row in sheet.iter_rows(min_row=11, values_only=True):
+                _created, _status = self.create_member_from_file(*row)
+                if _status:
+                    messages.success(
+                        self.request, 'Share uploaded successfully!')
+                else:
+                    messages.error(
+                        self.request, f'member "{_created}" is not found in member list!')
+        else:
+            messages.error(
+                self.request, f'Only excel (.xlsx) file is supported')
         return redirect('share:index')
 
     def create_member_from_file(self, member_entry, year_entry, month_entry, week_entry, hisa, jamii):
         _member = Member.objects.filter(
-            user__username__contains=member_entry).distinct()
+            user__username__icontains=member_entry.strip().lower()).distinct()
         if _member.exists():
             _year, info = YearModel.objects.get_or_create(name=year_entry)
             _month, info = MonthModel.objects.get_or_create(

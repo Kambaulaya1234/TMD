@@ -1,7 +1,8 @@
 {% extends 'layouts/base.html'%}
+{% load static%}
 
 {% block content %}
-<div class="page-wrapper flex-row align-items-center">
+<!-- <div class="page-wrapper flex-row align-items-center">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 col-md-offset-3">
@@ -17,15 +18,12 @@
                             {% csrf_token %}
                             <div class="card-body py-5">
                                 <div class="form-group">
-                                    <!-- <label class="form-control-label">Old Password <span style="color:red">*</span></label> -->
                                     <input type="password" class="form-control" name="old" placeholder="Enter currently Password " required>
                                 </div>
                                 <div class="form-group">
-                                    <!-- <label class="form-control-label">New Password <span style="color:red">*</span></label> -->
                                     <input type="password" class="form-control" name="new" placeholder="Enter New Password" required>
                                 </div>
                                 <div class="form-group">
-                                    <!-- <label class="form-control-label">Confirm New Password <span style="color:red">*</span></label> -->
                                     <input type="password" class="form-control" name="confirm" placeholder="confirm New Password"  required>
                                 </div>
     
@@ -47,5 +45,60 @@
                 </div>
             </div>
         </div>
-</div>
+</div> -->
+
+
+
+<div class="login-box">
+  
+    <!-- /.login-logo -->
+    <div class="card">
+  <br>
+
+        <div class="login-logo">
+            <a href="">
+              <img src="{% static 'administrator/dist/img/login.png' %}" alt="." width="120px">
+          </div>
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">You are only one step a way from your new password, recover your password now.</p>
+  
+        <form action="login.html" method="post">
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Enter currently Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Enter new Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Confirm new Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Change password</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+  <br>
+      </div>
+      <!-- /.login-card-body -->
+    </div>
+  </div>
+
+
 {% endblock  %}

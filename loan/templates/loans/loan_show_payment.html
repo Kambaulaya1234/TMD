@@ -24,19 +24,21 @@
   <div class="card">
     <div class="card-header">
       <h3 class="card-title text-muted"><Strong>
-        <div class="post">
+          <div class="post">
             <div class="user-block">
-              <img class="img-circle img-bordered-sm" src="{{ user.profile.profile.url }}" alt="user image">
+              <img class="img-circle img-bordered-sm" src="{{ loan.member.user.profile.profile.url }}" alt=".">
               <span class="username">
                 <a href="#">{{ loan.member|title }} Loan</a>
               </span>
               <span class="description">Loan since {{ loan.created_at }}</span>
             </div>
           </div>
-        
-        </Strong></h3>
 
+        </Strong></h3>
     </div>
+
+
+
     <div class="card-body" style="display: block;">
       <div class="row justify">
         <div class="col-12 col-md-12 col-lg-12 order-2 order-md-1">
@@ -45,15 +47,17 @@
               <div class="info-box bg-light">
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"><strong>Loan Amount</strong></span>
-                  <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS {{ loan.amount }}/=</span>
+                  <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
+                    {{ loan.amount }}/=</span>
                 </div>
               </div>
             </div>
             <div class="col-12 col-sm-3">
               <div class="info-box bg-light">
                 <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted"> <strong>Return  Amount</strong></span>
-                  <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS {{ loan.total }}/=</span>
+                  <span class="info-box-text text-center text-muted"> <strong>Return Amount</strong></span>
+                  <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
+                    {{ loan.total }}/=</span>
                 </div>
               </div>
             </div>
@@ -61,7 +65,8 @@
               <div class="info-box bg-light">
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"><Strong>Total Paid Amount</Strong></span>
-                  <span class="info-box-number text-center  mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS {{ loan.paid }}/=<span>
+                  <span class="info-box-number text-center  mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
+                    {{ loan.paid }}/=<span>
                     </span></span></div>
               </div>
             </div>
@@ -70,12 +75,13 @@
               <div class="info-box bg-light">
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"><Strong>Total Remained Amount</Strong></span>
-                  <span class="info-box-number text-center  mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS {{ loan.remained_amount }}/=<span>
+                  <span class="info-box-number text-center  mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
+                    {{ loan.remained_amount }}/=<span>
                     </span></span></div>
               </div>
             </div>
             {% endif %}
-            
+
           </div>
 
 
@@ -86,42 +92,107 @@
           <div class="row">
             <div class="col-12">
               <h4>Recent Payment</h4>
-             <br>
+              <br>
 
-<table class="table">
-    <thead>
-        <th>#</th>
-        <th>Reference No</th>
-        <th>Amount Paid(TZS)</th>
-        <th>Paid at</th>
-        <th>Recorded By</th>
-        <th>Action</th>
-    </thead>
-<tbody>
-  
+              <table class="table">
+                <thead>
+                  <th>#</th>
+                  <th>Reference No</th>
+                  <th>Amount Paid(TZS)</th>
+                  <th>Paid at</th>
+                  <th>Recorded By</th>
+                  <th>Action</th>
+                </thead>
+                <tbody>
 
-    {% for single in loan.payments.all %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ single.ref_code }}</td>
-        <td>{{ single.paid }}</td>
-        <td>{{ single.date }}</td>
-        <td>{{ single.by.get_full_name }}</td>
-        <td>
-            <a href="" class="btn btn-danger btn-sm" title="remove payment">
-                <i class="fa fa-trash"></i>
-                </a>
-        </td>
-    </tr>
-    {% endfor %}
 
-</tbody>
-</table>
-{% else %}
-<div class="jumbotron text-center text-danger">
-  No any recently Payment Recorded
-</div>
-{% endif %}
+                  {% for single in loan.payments.all %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ single.ref_code }}</td>
+                    <td>{{ single.paid }}</td>
+                    <td>{{ single.date }}</td>
+                    <td>{{ single.by.get_full_name }}</td>
+                    <td>
+                      <a href="" class="btn btn-danger btn-sm" title="remove payment" data-toggle="modal"
+                        data-target="#deletePayment{{ single.id }}">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+                  <div class="modal fade" id="deletePayment{{ single.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          Delete Payment
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="{{ single.delete }}">
+                            <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                            <p class="text-center">Are Your Sure?
+                              <br> Delete payment with Reference
+                              <strong style="color: red;">
+                                {{ single.ref_code|truncatechars:5 }}
+                              </strong>?</p>
+
+                            <div class="card card-danger">
+                              <div class="card-header">
+                                <h6 class="card-title text-center">
+                                  <small>Do You wish to discount TZS {{ single.paid }}/= from Loan paid?</small></h6>
+                              </div>
+                              <div class="card-body">
+                                <div class="col-8">
+                                  <div class="icheck-primary">
+                                      <input type="checkbox" id="remember" name="discount" value="1">
+                                      <label for="remember">
+                                          Yes? Discount from paid Loan
+                                      </label>
+                                  </div>
+                              </div>
+                              </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-danger btn-sm">Yes? Delete
+                              </button>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  {% endfor %}
+
+                </tbody>
+              </table>
+              {% else %}
+              <div class="jumbotron text-center text-danger">
+                No any recently Payment Recorded
+              </div>
+              {% endif %}
 
 
 

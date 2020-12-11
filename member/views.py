@@ -10,6 +10,7 @@ import random
 import string
 from accounts.models import Profile
 from openpyxl import load_workbook
+import datetime
 
 
 class IndexView(View):
@@ -83,12 +84,33 @@ class RemoveView(View, BaseObject):
         return redirect('member:index')
 
 
+class EditMemberView(View, BaseObject):
+    def post(self, *args, **kwargs):
+        if self.get_object(kwargs['id']).exists():
+            _member = self.get_object(kwargs['id'])
+            context = {
+                'username': self.request.POST['username'].lower(),
+                'first_name': self.request.POST['first_name'],
+                'last_name': self.request.POST['last_name'],
+                'email': self.request.POST['email'],
+            }
+            if User.objects.filter(id=_member[0].user.id).exists():
+                _phone=int(self.request.POST['phone'])
+                user=User.objects.filter(id=_member[0].user.id)
+                user.update(**context)
+                Profile.objects.filter(user=_member[0].user).update(phone=_phone)
+                messages.success(self.request, 'member updated successfully!')
+        return redirect('member:index')
+
+
 class PayLoanView(View, BaseObject):
     def post(self, *args, **kwargs):
         member = self.get_object(kwargs['id'])[0]
         amount = float(self.request.POST['amount'])
-        deadline = self.request.POST['deadline']
-        Loan.objects.create(member=member, amount=amount, deadline=deadline)
+        start = self.request.POST['start']
+        deadline = datetime.datetime.today()+datetime.timedelta(weeks=36)
+        Loan.objects.create(member=member, amount=amount,
+                            deadline=deadline, created_at=start)
         messages.success(
             self.request, f'member {member.user} assigned loan  successfully!')
         return redirect('loan:index')
@@ -101,7 +123,7 @@ class CreateMemberView(View):
 
     def post(self, *args, **kwargs):
         context = {
-            'username': self.request.POST['first_name'].lower(),
+            'username': self.request.POST['last_name'].lower(),
             'first_name': self.request.POST['first_name'],
             'last_name': self.request.POST['last_name'],
             'email': self.request.POST['email'],
@@ -110,8 +132,6 @@ class CreateMemberView(View):
         if not User.objects.filter(username=context['username']).exists():
             _phone = self.request.POST['phone']
             _user = User.objects.create_user(**context)
-            # _group=Group.objects.filter(id=group_id)
-            # _user.groups.set(_group)
             Profile.objects.create(user=_user, phone=_phone, is_member=True)
             _member = Member.objects.create(user=_user, is_member=True)
 
@@ -147,8 +167,6 @@ class ImportMemberView(View):
         if not User.objects.filter(username=context['username']).exists():
             _phone = phone
             _user = User.objects.create_user(**context)
-            # _group=Group.objects.filter(id=group_id)
-            # _user.groups.set(_group)
             Profile.objects.create(user=_user, phone=_phone, is_member=True)
             _member = Member.objects.create(user=_user, is_member=True)
 

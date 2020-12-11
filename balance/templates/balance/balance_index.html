@@ -45,7 +45,7 @@
       <!-- ./col -->
       <div class="col-lg-4 col-4">
         <!-- small card -->
-        <div class="small-box bg-success">
+        <div class="small-box bg-danger">
           <div class="inner">
             {% fine_amount as fine %}
             <h5>TZS <strong>{{ fine|intword|intcomma }}</strong>/=</h5>
@@ -115,7 +115,7 @@
         </div>
       </div>
       <div class="col-lg-4 col-4">
-        <div class="small-box bg-danger">
+        <div class="small-box bg-success">
           <div class="inner">
             {% if balance.total %}
             <h5>TZS <strong>{{ balance.total|intword|intcomma }}</strong>/=</h5>

@@ -130,15 +130,18 @@
         </li>
         {% endif %}
 
-        <!-- <li class="nav-header">Configuration</li> -->
 
-        <!-- <li class="nav-item has-treeview">
+        {% if user.is_superuser %}
+
+        <li class="nav-header">Configuration</li>
+
+        <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
             <i class="nav-icon fa fa-microchip "></i>
             <p>
-              Supervisor
+              Brand
               <i class="fas fa-angle-left right"></i>
-              <span class="badge badge-info right">11</span>
+              <!-- <span class="badge badge-info right">11</span> -->
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -156,12 +159,6 @@
                 <p class="text">Manage Department</p>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
-                <p class="text">Manage Category</p>
-              </a>
-            </li>
 
           </ul>
         </li>
@@ -171,7 +168,7 @@
             <p>
               Settings
               <i class="fas fa-angle-left right"></i>
-              <span class="badge badge-info right">11</span>
+              <!-- <span class="badge badge-info right">11</span> -->
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -202,7 +199,8 @@
             </li>
 
           </ul>
-        </li> -->
+        </li>
+        {% endif %}
 
         {% if pe or perms.share or perms.loan or perms.balance %}
         <li class="nav-header">Management </li>
@@ -212,7 +210,7 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fa  fa-bars"></i>
             <p>
-              Share
+              Share(Hisa)
               <i class="fas fa-angle-left right"></i>
               <!-- <span class="badge badge-info right">12</span> -->
             </p>

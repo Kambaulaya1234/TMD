@@ -15,8 +15,8 @@ class Loan(models.Model):
     insurance = models.FloatField(blank=True, null=True)
     paid = models.FloatField(default=0)
     status = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField()
+    deadline = models.DateTimeField()
     
     
 
@@ -74,6 +74,9 @@ class Payment(models.Model):
 
     def reference_code(self):
         return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+    
+    def delete(self):
+        return reverse('loan:delete_payment', kwargs={'id': self.id})
 
     def save(self, *args, **kwargs):
         self.ref_code = self.reference_code().upper()

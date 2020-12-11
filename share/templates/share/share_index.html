@@ -26,15 +26,21 @@
                 <h3 class="card-title">{{ week.name}} | Active Share List</h3>
                 <div class="float-right">
                     {% if perms.share.add_share %}
+                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
+                        <i class="fa  fa-plus-circle"></i>
+                        Create Share</a>
 
-                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">Create
-                        Share</a>
-                        {% endif %}
+                    <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                        <i class="fa  fa-folder-open"></i> Import From File
+                    </a>
+                    {% endif %}
+                    {% if perms.share.delete_share %}
+                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAll">
+                        <i class="fa fa-file-excel-o"></i> Delete All
+                    </a>
+                    {% endif %}
 
-                        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
-                            <i class="fa fa-file-excel-o"></i> Import From File
-                        </a>
-                  
+
                 </div>
             </div>
         </div>
@@ -103,7 +109,7 @@
                         </td>
                         <td>
                             <strong>TSH {{ share.jamii }}/=</strong>
-                            
+
                             <!-- <td class="project-state">
                             <span class="badge badge-success">Success</span>
                         </td> -->
@@ -155,6 +161,7 @@
                             </div>
                         </div>
                     </div>
+
                     {% endfor %}
 
                 </tbody>
@@ -164,6 +171,34 @@
     </div>
     <!-- /.card -->
 
+   
+<div class="modal fade" id="deleteAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            Delete All Share
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'share:delete_all' %}">
+
+                <p>Are Your Sure? <strong style="color: red;"> Delete All {{ week.share.all.count }}
+                    Share</strong>?
+                </p>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Yes? Delete All Share
+                    </button>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
 
 
 
@@ -175,9 +210,9 @@
         <h5>No data found at this week</h5>
         <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
             <i class="fa fa-bars"></i> Create Share</a> or
-             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
-                <i class="fa fa-folder"></i> Import From File
-             </a>
+        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+            <i class="fa fa-folder"></i> Import From File
+        </a>
     </div>
 </div>
 {% endif %}
@@ -188,15 +223,12 @@
         <h5>No data found at {% now 'M' %}|{% now 'Y' %}</h5>
         <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
             <i class="fa fa-bars"></i> Create Share</a> or
-             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
-                <i class="fa fa-folder"></i> Import From File
-             </a>
-          
+        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+            <i class="fa fa-folder"></i> Import From File
+        </a>
+
     </div>
 </div>
-
-
-
 
 {% endfor %}
 
@@ -231,47 +263,45 @@
 
 
 
-
-
-
-
-
-
-
-
 <div class="modal fade" id="upload{{ member.id }}" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    Import Panel
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            Import Panel
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'share:upload' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="">Choose Format</label>
+                    <select name="choice" class="form-control">
+                        <option value="0" disabled>---choose format---</option>
+                        <option value="1" selected>Excel(.xlsx)</option>
+                        <option value="2" disabled class="text-muted">CSV</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="import">Choose File</label><br>
+                    <input required type="file" name="file" class="btn btn-primary btn-sm form-control" id="import">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success btn-sm">Upload Now
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form action="{% url 'share:upload' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="">Choose Format</label>
-                            <select name="choice" class="form-control"  >
-                                <option value="0"  disabled>---choose format---</option>
-                                <option value="1" selected>Excel(.xlsx)</option>
-                                <option value="2" disabled class="text-muted">CSV</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="import">Choose File</label><br>
-                            <input required type="file" name="file" class="btn btn-primary btn-sm form-control" id="import">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success btn-sm">Upload Now
-                            </button>
-                        </div>
-                </div>
-                </form>
-            </div>
         </div>
+        </form>
     </div>
+</div>
+</div>
+
+
+
+
+
+
 {% endblock %}

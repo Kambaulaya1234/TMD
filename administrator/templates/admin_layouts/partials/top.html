@@ -131,12 +131,18 @@
         <li class="user-body">
           <div class="row">
             <div class="col-6 text-center">
-              {% for group in user.groups.all %}
               <small>
-
-                <a style="text-transform: uppercase;" href="#">{{ group.name }} Group</a>
+                {% if user.is_superuser %}
+                {% if user.groups.first == None %}
+                <span class="description-text">SUPER ADMIN</span>
+                {% else %}
+                <span class="description-text">{{ user.groups.first }}</span>
+                {% endif %}
+                {% else %}
+                <span class="description-text">{{ user.groups.first }}</span>
+                {% endif %}
+                <!-- <a style="text-transform: uppercase;" href="#">{{ group.name }} Group</a> -->
               </small>
-              {% endfor %}
             </div>
             {% if perms.auth %}
             <div class="col-3 text-center">
@@ -148,7 +154,7 @@
 
             {% if user.is_superuser %}
             <div class="col-3 text-center">
-              <a href="/admin" title="View logs">HLA</a>
+              <a href="/admin" target="_blank" title="View logs">HLA</a>
             </div>
             {% endif %}
 

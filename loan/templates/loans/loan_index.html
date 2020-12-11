@@ -191,7 +191,7 @@
                                             <label for="paid">How Much did <strong>{{ loan.member|title }}</strong> paid
                                                 ?</label>
                                             <input type="text" class="form-control" name="paid" id="paid"
-                                                placeholder="Enter Paid Amount">
+                                                placeholder="Enter Paid Amount" required>
                                         </div>
 
                                         <div class="modal-footer">
@@ -216,7 +216,7 @@
 {% else %}
 <div class="jumbotron text-center">
     <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
-        <h5>No data found at this week </h5>
+        <h6>No Loan Found</h6>
     </div>
 </div>
 {% endif %}

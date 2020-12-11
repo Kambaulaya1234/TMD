@@ -7,8 +7,8 @@
     <!-- Widget: user widget style 1 -->
     <div class="card card-widget widget-user">
       <div class="widget-user-header bg-primary">
-        <h3 class="widget-user-username">{{ user.get_full_name }}</h3>
-        <h5 class="widget-user-desc">Administrator</h5>
+        <!-- <h3 class="widget-user-username">{{ user.get_full_name }}</h3>
+        <h5 class="widget-user-desc">Administrator</h5> -->
         <!-- <h5 class="widget-user-desc">Founder &amp; CEO</h5> -->
       </div>
 
@@ -19,24 +19,36 @@
         <div class="row">
           <div class="col-sm-4 border-right">
             <div class="description-block">
-              <h5 class="description-header">3,200</h5>
-              <span class="description-text">Loan</span>
+              {% if user.is_active %}
+              <h5 class="description-header">
+                <span class="badge badge-success">ACTIVE</span>
+              </h5>
+              {% endif %}
+              <span class="description-text">status</span>
             </div>
             <!-- /.description-block -->
           </div>
           <!-- /.col -->
           <div class="col-sm-4 border-right">
             <div class="description-block">
-              <h5 class="description-header">11</h5>
-              <span class="description-text">Share/Hisa</span>
+              <h6 class="widget-user-username"><strong>{{ user.get_full_name }}</strong></h6>
+              {% if user.is_superuser %}
+              {% if user.groups.first == None %}
+              <span class="description-text">SUPER ADMIN</span>
+              {% else %}
+              <span class="description-text">{{ user.groups.first }}</span>
+              {% endif %}
+              {% else %}
+              <span class="description-text">{{ user.groups.first }}</span>
+              {% endif %}
             </div>
             <!-- /.description-block -->
           </div>
           <!-- /.col -->
           <div class="col-sm-4">
             <div class="description-block">
-              <h5 class="description-header">40000</h5>
-              <span class="description-text">Insurance</span>
+              <h5 class="description-header">{{ user.email }}</h5>
+              <span class="description-text">Your Email</span>
             </div>
             <!-- /.description-block -->
           </div>
@@ -55,7 +67,7 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Balance Summary</h3>
+        <h3 class="card-title">Profile Details</h3>
 
       </div>
       <div class="card-body" style="display: block;">
@@ -65,8 +77,15 @@
               <div class="col-12 col-sm-4">
                 <div class="info-box bg-light">
                   <div class="info-box-content">
-                    <span class="info-box-text text-center text-muted">Credit Amount</span>
-                    <span class="info-box-number text-center text-muted mb-0">8.7mil</span>
+                    <span class="info-box-text text-center text-muted">Phone Number</span>
+                    <span class="info-box-number text-center text-muted mb-0">
+                      {% if user.profile.phone %}
+                      {{ user.profile.phone }}
+                      {% else %}
+                      <small style="color: brown;">No Phone Founds</small>
+                      {% endif %}
+                    </span>
+                    
                   </div>
                 </div>
               </div>

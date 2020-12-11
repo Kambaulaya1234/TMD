@@ -46,8 +46,8 @@ class RemoveView(View, BaseObject):
 
 
 class LoanProgressPaymentView(View, BaseObject):
-    def create_loan_payment(self,loan, paid,user):
-        _payment = Payment.objects.create(loan=loan, paid=paid,by=user)
+    def create_loan_payment(self, loan, paid, user):
+        _payment = Payment.objects.create(loan=loan, paid=paid, by=user)
         return _payment
 
     def post(self, *args, **kwargs):
@@ -56,7 +56,7 @@ class LoanProgressPaymentView(View, BaseObject):
         if loan.paid <= (loan.profit_amount+loan.insurance):
             if float(_paid) <= ((loan.profit_amount+loan.insurance) - loan.paid):
                 loan.paid += float(_paid)
-                self.create_loan_payment(loan,_paid,self.request.user)
+                self.create_loan_payment(loan, _paid, self.request.user)
                 loan.save()
                 if loan.paid == (loan.profit_amount+loan.insurance):
                     loan.status = True
@@ -79,3 +79,23 @@ class LoanShowView(View, BaseObject):
             'loan': _loan,
         }
         return render(self.request, template_name, context)
+
+
+class RemovePaymentView(View, BaseObject):
+    def get(self, *args, **kwargs):
+        _ID = kwargs['id']
+        _loan_id = self.request.GET['loan_id']
+        loan = self.get_object(id=_loan_id)[0]
+        payment_object = Payment.objects.filter(id=_ID)[0]
+        if self.request.GET.get('discount'):
+            _paid_amount=float(payment_object.paid)
+            loan.paid -= _paid_amount
+            loan.save()
+            messages.success(
+                self.request, f'TZS {payment_object.paid}/= discounted from {loan} loan successfully!')
+        else:
+            messages.success(
+                self.request, f'record of TZS {payment_object.paid}/= from {loan} loan cleared successfully!')
+            
+        Payment.objects.filter(id=_ID).delete()
+        return redirect('loan:show', loan.id)

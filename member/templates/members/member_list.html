@@ -27,10 +27,12 @@
                 <h3 class="card-title">Active Members List </h3>
                 <div class="float-right">
                     {% if perms.member.add_member%}
-                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createMember">Create
-                        Member</a>
+                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createMember">
+                        <i class="fa  fa-plus-circle"></i>
+                        Create Member</a>
 
                     <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
+                        <i class="fa fa-folder-open"></i>
                         Import From File
                     </a>
                     {% endif %}
@@ -110,7 +112,11 @@
 
                         </td>
                         <td class="text-center">
+                            {% if member.user.email %}
                             <strong> {{ member.user.email }}</strong>
+                            {% else %}
+                            Not Yet Assigned
+                            {% endif %}
 
                         </td>
                         <td class="project-state">
@@ -122,6 +128,14 @@
                         </td>
 
                         <td class="text-center">
+                            {% if perms.member.change_member %}
+
+                            <a class="btn btn-info btn-sm" href="" title="Edit Member" data-toggle="modal"
+                                data-target="#editMember{{ member.id }}">
+                                <i class="fas fa-edit">
+                                </i>
+                            </a>
+                            {% endif %}
                             {% if perms.member.view_member %}
 
                             <a class="btn btn-primary btn-sm" href="{{ member.get_profile }}" title="View Profile">
@@ -179,6 +193,84 @@
                     <!-- end Modal -->
 
 
+
+
+
+                    <div class="modal fade" id="editMember{{ member.id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Update Member</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ member.edit }}" method="POST">
+                                    <div class="modal-body">
+
+                                        <div class="form-group">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label for="username">Username <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" name="username" id="username"
+                                                    class="form-control" required placeholder="Enter first name"
+                                                    value="{{ member.user.username }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="first_name">First Name <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" name="first_name" id="first_name"
+                                                    class="form-control" required placeholder="Enter first name"
+                                                    value="{{ member.user.first_name }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="last_name">Last Name <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" name="last_name" id="last_name" class="form-control"
+                                                    placeholder="Enter last name" required
+                                                    value="{{ member.user.last_name }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="text" name="email" id="email" class="form-control"
+                                                    placeholder="Enter Email (Optional)"
+                                                    value="{{ member.user.email }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">Phone Number <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" name="phone" id="phone" class="form-control"
+                                                    placeholder="Enter phone Number" required
+                                                    value="{{ member.user.profile.phone }}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default btn-sm"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary btn-sm">Update Member</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <!-- loan Modal -->
                     <div class="modal fade" id="loan{{ member.id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -195,16 +287,19 @@
                                         {% csrf_token %}
                                         <ul class="list-group">
                                             <li class="list-group-item">Member:
-                                                <strong>{{ member.user }}</strong></li><br>
+                                                <strong>{{ member.user }} <span style="color: brown;">(ulitoa mkopo kwa
+                                                        {{ member.user }} ?)</span></strong></li><br>
                                             <div class="form-group">
-                                                <label for="amount">How Much (TZS)?</label>
+                                                <label for="amount">How Much (TZS)? <span style="color: brown;">(Kiwango
+                                                        cha pesa)</span></label>
                                                 <input class="form-control" type="text" name="amount" id="amount"
                                                     placeholder="Enter Loan Amount" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="deadline">When will {{ member.user|title }} return
-                                                    Loan?</label>
-                                                <input class="form-control" type="date" name="deadline" id="deadline"
+                                                <label for="deadline">When did {{ member.user|title }} assigned
+                                                    Loan? <span style="color: brown;">(umempa lini mkopo
+                                                        ?)</span></label>
+                                                <input class="form-control" type="date" name="start" id="deadline"
                                                     placeholder="Enter Deadline Amount" required>
                                             </div>
                                             </li>
@@ -239,7 +334,7 @@
 
 
 
-    
+
 
 
 
@@ -248,14 +343,14 @@
 <div class="jumbotron text-center">
     <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
         <hr>
-        
+
         <h6>No Members Added Yet</h6>
         <hr>
         <small>
             {% if perms.member.add_member%}
             <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createMember">Create
                 Member</a>
-or 
+            or
             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
                 Import From File
             </a>
@@ -282,24 +377,24 @@ or
                     <div class="form-group">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="first_name">First Name</label>
-                            <input type="text" name="first_name" id="first_name" class="form-control"
+                            <label for="first_name">First Name <span class="text-danger">*</span></label>
+                            <input type="text" name="first_name" id="first_name" class="form-control" required
                                 placeholder="Enter first name">
                         </div>
                         <div class="form-group">
-                            <label for="last_name">Last Name</label>
+                            <label for="last_name">Last Name <span class="text-danger">*</span></label>
                             <input type="text" name="last_name" id="last_name" class="form-control"
-                                placeholder="Enter last name">
+                                placeholder="Enter last name" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="text" name="email" id="email" class="form-control"
-                                placeholder="Enter Email">
+                                placeholder="Enter Email (Optional)">
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone Number</label>
+                            <label for="phone">Phone Number <span class="text-danger">*</span></label>
                             <input type="text" name="phone" id="phone" class="form-control"
-                                placeholder="Enter phone Number">
+                                placeholder="Enter phone Number" required>
                         </div>
 
                     </div>
@@ -312,8 +407,6 @@ or
         </div>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="upload{{ member.id }}" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -350,5 +443,4 @@ or
         </div>
     </div>
 </div>
-
 {% endblock %}
