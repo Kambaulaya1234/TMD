@@ -14,9 +14,9 @@
                 </ol>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
-
+{% if members %}
 <section class="content">
 
     <!-- Default box -->
@@ -52,9 +52,9 @@
                         <th>
                             status
                         </th>
-                      
+
                         {% if perms.member.change_member%}
-                        
+
                         <th style="width: 20%" class="text-center">
                             Actions
                         </th>
@@ -71,7 +71,7 @@
                         <td>
                             <a>
                                 <!-- {{ member.user.get_full_name }} -->
-                                <strong>{{ member.user.username|title }}</strong>
+                                <strong>{{ member.user.username|upper }}</strong>
                             </a>
                             <br>
 
@@ -103,16 +103,16 @@
                             <span class="badge badge-danger">Inactive</span>
                             {% endif %}
                         </td>
-                      
+
                         <td class="text-center">
                             {% if perms.member.change_member%}
-                            
+
                             <a class="btn btn-warning btn-sm" href="#" data-toggle='modal'
-                            data-target="#deleteShare{{ member.id }}">
-                            <i class="fas fa-key">
-                            </i>
-                        </a>
-                        {% endif %}
+                                data-target="#deleteShare{{ member.id }}">
+                                <i class="fas fa-key">
+                                </i>
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
 
@@ -138,24 +138,26 @@
                                         <ul class="list-group">
                                             {% for share in member.share.all %}
                                             <li class="list-group-item">Fine: Tsh
-                                                <strong>{{ share.fine_amount }}/=</strong></li>
-                                                <input type="hidden" name="week_id" value="{{ share.week.id }}">
-                                                <input type="hidden" name="year_id" value="{{ share.year.id }}">
+                                                <strong>{{ share.fine_amount }}/=</strong>
+                                            </li>
+                                            <input type="hidden" name="week_id" value="{{ share.week.id }}">
+                                            <input type="hidden" name="year_id" value="{{ share.year.id }}">
                                             <li class="list-group-item">week: <strong>{{ share.week }}</strong></li>
                                             <li class="list-group-item">From: <strong>{{ share.created_at }}</strong>
                                             </li>
                                             {% endfor %}
                                             <li class="list-group-item">Jamii
-                                                <strong>TZS 5000/=</strong></li>
-                                            <li class="list-group-item">Activated by You 
+                                                <strong>TZS 5000/=</strong>
+                                            </li>
+                                            <li class="list-group-item">Activated by You
                                                 (<strong>{{ user.get_full_name }}</strong>)</li>
                                         </ul>
                                         <br>
                                         <input class="form-control" type="number" name="hisa"
-                                            placeholder="Enter Share or Hisa">
-                                    
-                                        <input class="form-control" type="password" name="password"
-                                            placeholder="Re-enter Your Password">
+                                            placeholder="Enter Share(Hisa)">
+
+                                        <!-- <input class="form-control" type="password" name="password"
+                                            placeholder="Re-enter Your Password"> -->
 
 
                                         <div class="modal-footer">
@@ -211,4 +213,11 @@
         </div>
     </div>
 </section>
+{% else %}
+<div class="jumbotron text-center">
+    <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
+        <h6>No Inactive member Found</h6>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

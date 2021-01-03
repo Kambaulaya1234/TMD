@@ -8,6 +8,9 @@ urlpatterns = [
     path('delete/<int:id>', RemoveView.as_view(), name='delete'),
     path('paid/<int:id>', LoanProgressPaymentView.as_view(), name='paid'),
     path('show-payment/<int:id>', LoanShowView.as_view(), name='show'),
-    path('delete-payment/<int:id>', RemovePaymentView.as_view(), name='delete_payment')
+    path('upload-loan/', HandleUploadedFileView.as_view(), name='upload'),
+    path('delete/all', RemoveAll.as_view(), name='delete_all'),
+    path('delete-payment/<int:id>',
+         RemovePaymentView.as_view(), name='delete_payment')
 
 ]

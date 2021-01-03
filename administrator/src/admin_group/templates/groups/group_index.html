@@ -2,194 +2,183 @@
 {% load static %}
 {% block title %} administrator | TMD {% endblock%}
 {% block content %}
-
-<div class="container">
-
-
-
-<div class="content-header">
+{% if groups %}
+<br>
+<section class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Orbit Panel </h1>
-      </div><!-- /.col -->
+        <h1>Orbital Lines</h1>
+      </div>
       <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Group</li>
-        </ol>
-      </div><!-- /.col -->
-    </div><!-- /.row -->
-  </div><!-- /.container-fluid -->
-  <!-- /.content-header -->
-    {% if  groups  %}
+      
 
-    <div class="card">
-      <div class="card-header border-transparent">
-        <h3 class="card-title">Orbital Lines</h3>
-
-        <div class="card-tools" >
-          <!-- <button type="button" class="btn btn-tool" data-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button> -->
-            <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
-            class="btn btn-sm btn-info float-right">
-            <i class="fa  fa-plus-circle"></i>
-            Create Orbit</a>
-        
+        <div class="float-right">
+          <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
+        class="btn btn-sm btn-info ">
+        <i class="fa  fa-plus-circle"></i>
+        Create Orbit</a>
+          <!-- <a href="javascript:void(0)" data-toggle="modal" data-target="#"
+        class="btn btn-sm btn-danger ">
+        <i class="fa  fa-trash"></i>
+        Delete All</a> -->
         </div>
-
-
-
       </div>
-      <!-- /.card-header -->
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table m-0">
-            <thead>
-              <tr>
-                <th>Orbit ID</th>
-                <th>Orbit</th>
-                <th>Status</th>
-                <th>#Permissions</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for group in groups %}
-              <tr>
-                <td><a href="">{{ forloop.counter }}</a></td>
-                <td>{{ group.name }}</td>
-                <td><span class="badge badge-success">Active</span></td>
-                <td>
-                  <div class="sparkbar" data-color="#00a65a" data-height="20">{{ group.permissions.count }}</div>
-                </td>
-                <td>
-                  {% if group.name == 'administrator' or group.name == 'applicants' or group.name == 'managers'  %}
-                  <span title="No any action allowed" style="color: red;"> 
-                  <i class="fa fa-ban"></i>
-                  <i class="fa fa-ban"></i>
-                  <i class="fa fa-ban"></i>
-                    </span>
-                  {% else %}
-                  <a  title="Edit Group info" style="margin-right: 10px;" href="" data-toggle="modal"
-                    data-target="#editGroup{{ group.id }}" class="text-primary"> <i class="fa fa-edit"></i> </a>
-                  <a title="Grant Permission" style="margin-right: 10px;"
-                    href="{% url 'administrator:grant_access' group.id %}" class="text-primary"> <i
-                      class="fa fa-key"></i> </a>
-                  <a title="Delete Group " href="javascript:void(0)" data-toggle='modal' data-target="#deleteGroup{{ group.id }}"
-                    class="text-danger"> <i class="fa fa-trash"></i> </a>
-                  {% endif %}
-
-
-
-
-
-
-                      <!-- Create Modal -->
-              <div class="modal fade" id="deleteGroup{{ group.id }}" tabindex="-1" role="dialog"
-              aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    Delete Orbit
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="{% url 'administrator:remove_group' group.id  %}">
-                      {% csrf_token %}
-                      <p>Are Your Sure? Delete <strong style="color: red;">{{ group.name }} Orbit</strong>?</p>
-
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Orbit </button>
-                      </div>
-                  </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <!-- end Modal -->
-
-
-            <!-- Edit Modal -->
-            <div class="modal fade" id="editGroup{{ group.id }}" tabindex="-1" role="dialog"
-              aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    Edit Orbit
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="{% url 'administrator:update_group' group.id  %}" method="POST">
-                      {% csrf_token %}
-                      <div class="form-group">
-                        <input type="text" name="name" class="form-control" autofocus
-                          placeholder="Enter Your New group Name" value="{{ group.name }}">
-                      </div>
-
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Update </button>
-                      </div>
-                  </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <!-- end Modal -->
-                </td>
-
-
-
-              </tr>
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-              {% endfor  %}
-
-
-
-            </tbody>
-          </table>
-        </div>
-        <!-- /.table-responsive -->
-      </div>
-      <!-- /.card-body -->
-      <!-- <div class="card-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-left">View Inactive Group</a>
-        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"
-          class="btn btn-sm btn-info float-right">Create Group</a>
-      </div> -->
-
-
-
-
-
-
-      <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
+  </div><!-- /.container-fluid -->
+</section>
+
+
+<section class="content">
+  <div class="card card-solid">
+   
+    <div class="card-body pb-0">
+    
+      <div class="row d-flex align-items-stretch">
+
+
+        {% for group in groups %}
+        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+          <div class="card bg-light">
+            <div class="card-header text-muted border-bottom-0">
+              Orbit ID: 0{{ forloop.counter }}
+              <div class="float-right">
+                <h6 class="badge badge-success">Active</h6>
+              </div>
+            </div>
+            <div class="card-body pt-0">
+              <div class="row">
+                <div class="col-7">
+                  <h2 class="lead"><b><strong style="color: rgb(90, 90, 90);">{{ group.name|upper }} </strong> </b></h2>
+                  <p class="text-muted text-sm"><b>About: </b>
+                    Group for <b> {{ group.name }}</b>
+
+                  </p>
+                  <ul class="ml-4 mb-0 fa-ul text-muted">
+                    <li class="small"><span class="fa-li"><i class="fas fa-lg fa-user"></i></span> <b>Participants</b> :
+                      {{ group.name|title }} group has  <b>{% if  group.user_set.all %} {{ group.user_set.all.count }}{% else%}no any {% endif%}  </b>Participants</li>
+                    <li class="small"><span class="fa-li"><i class="fas fa-lg fa-lock"></i></span> <b>Permissions</b> :
+                      {{ group.name|title }} group has <b>{{ group.permissions.count }} </b> Permissions</li>
+                  </ul>
+                </div>
+                <div class="col-5 text-center">
+                  <img src="/static/administrator/dist/img/logo.png" height="100" alt="." class="img-circle img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div class="text-right">
+
+                {% if group.name == 'administrator' %}
+                <span  title="No any action allowed">
+                 <p class="btn btn-sm btn-danger"> <i class="fa fa-ban"></i></p> 
+                 <p class="btn btn-sm btn-danger"> <i class="fa fa-ban"></i></p> 
+                 <p class="btn btn-sm btn-danger"> <i class="fa fa-ban"></i></p> 
+                </span>
+                {% else %}
+                <a class="btn btn-sm bg-teal" title="Edit Group info" style="margin-right: 10px;" href="" data-toggle="modal"
+                  data-target="#editGroup{{ group.id }}" class="text-primary"> <i class="fa fa-edit"></i> </a>
+                <a class="btn btn-sm btn-primary" title="Grant Permission" style="margin-right: 10px;"
+                  href="{% url 'administrator:grant_access' group.id %}" class="text-primary"> <i
+                    class="fa fa-key"></i> </a>
+                <a class="btn btn-sm btn-danger" title="Delete Group " href="javascript:void(0)" data-toggle='modal'
+                  data-target="#deleteGroup{{ group.id }}" class="text-danger"> <i class="fa fa-trash"></i> </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+                  <!-- Create Modal -->
+                  <div class="modal fade" id="deleteGroup{{ group.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          Delete Orbit
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="{% url 'administrator:remove_group' group.id  %}">
+                            {% csrf_token %}
+                            <p>Are Your Sure? Delete <strong style="color: red;">{{ group.name }} Orbit</strong>?</p>
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Orbit </button>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end Modal -->
+
+
+                  <!-- Edit Modal -->
+                  <div class="modal fade" id="editGroup{{ group.id }}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          Edit Orbit
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form action="{% url 'administrator:update_group' group.id  %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                              <input type="text" name="name" class="form-control" autofocus
+                                placeholder="Enter Your New group Name" value="{{ group.name }}">
+                            </div>
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary btn-sm">Update </button>
+                            </div>
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+
+        {% endfor %}
+
+      </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      <nav aria-label="Contacts Page Navigation">
+        <!-- <ul class="pagination justify-content-center m-0">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+          <li class="page-item"><a class="page-link" href="#">6</a></li>
+          <li class="page-item"><a class="page-link" href="#">7</a></li>
+          <li class="page-item"><a class="page-link" href="#">8</a></li>
+        </ul> -->
+        <div class="text-center">
+          <small style="color: gray;">(C){% now 'Y' %} Atlais,Higher Level administration Panel</small>
+        </div>
+      </nav>
+    </div>
   </div>
 
+</section>
 
 
 
@@ -199,10 +188,6 @@
 
 
 
-
-
-  <!-- /.card-footer -->
-</div>
 {% else %}
 <div class="jumbotron text-center text-info">
   <h5> <i class="fa fa-exclamation-triangle"></i> No any Orbit Found</h5>

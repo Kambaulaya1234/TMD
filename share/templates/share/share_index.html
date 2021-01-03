@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{ week.month}},{{ week.year}}</h1>
+                <h4 style="color: rgb(0, 78, 151);">Month: {{ week.month}},Year :{{ week.year}}</h4>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -26,13 +26,20 @@
                 <h3 class="card-title">{{ week.name}} | Active Share List</h3>
                 <div class="float-right">
                     {% if perms.share.add_share %}
+                    {% if week.share.all %}
                     <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
                         <i class="fa  fa-plus-circle"></i>
                         Create Share</a>
+                    {% endif %}
+                   
 
                     <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
                         <i class="fa  fa-folder-open"></i> Import From File
                     </a>
+                    <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#export">
+                        <i class="fa  fas  fa-file-excel"></i>
+                        Export Share</a>
+
                     {% endif %}
                     {% if perms.share.delete_share %}
                     <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAll">
@@ -49,7 +56,7 @@
                 <thead>
                     <tr>
                         <th style="width: 1%">
-                            #
+                            REG
                         </th>
                         <th style="width: 20%">
                             Team Member
@@ -79,12 +86,13 @@
                     {% for share in week.share.all %}
                     <tr>
                         <td>
-                            {{ forloop.counter }}
+                            <strong> {{ share.member.user.username|upper }}</strong>
+
                         </td>
                         <td>
                             <a>
                                 <!-- {{ share.user.get_full_name }} -->
-                                <strong>{{ share.member|title }}</strong>
+                                <strong>{{ share.member.user.get_full_name|title  }}</strong>
                             </a>
                             <br>
                             <small>
@@ -200,6 +208,36 @@ aria-hidden="true">
 </div>
 </div>
 
+<div class="card-footer">
+    <nav aria-label="Contacts Page Navigation">
+        <ul class="pagination justify-content-center m-0">
+            {% if weeks.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ weeks.previous_page_number }}">
+            <i class="fa fa-angle-double-left"></i></a></li>
+            {% endif %}
+
+        {% for pg in weeks.paginator.page_range%}
+        {% if weeks.number == pg %}
+        <li class="page-item active" ><a class="page-link" href="?page={{pg}}" class="">{{ pg }}</a></li>
+        {% else %}
+        {% if  pg < weeks.number|add:2 %}
+        <li class="page-item " ><a class="page-link" href="?page={{pg}}">{{ pg }}</a></li>
+        {% endif %}
+        {% endif %}
+         {% endfor %} 
+         {% if weeks.has_next %}
+         <li class="page-item"><a class="page-link"  href="?page={{ weeks.next_page_number }}"><i class="fa fa-angle-double-right"></i></a></li>
+         {% else %}
+         {% endif %}
+      </ul>
+    </nav>
+</div>
+
+
+
+
+
+
 
 
 </section>
@@ -220,9 +258,11 @@ aria-hidden="true">
 {% empty %}
 <div class="jumbotron text-center">
     <div class="text-center" style="border: 1px solid red;border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
-        <h5>No data found at {% now 'M' %}|{% now 'Y' %}</h5>
+        <small>No data found at {% now 'M' %}|{% now 'Y' %}</small> <br>
+        {% if week.share.all and week.month and week.year %}
         <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createShare">
             <i class="fa fa-bars"></i> Create Share</a> or
+        {% endif %}
         <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload{{ member.id }}">
             <i class="fa fa-folder"></i> Import From File
         </a>
@@ -291,6 +331,40 @@ aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success btn-sm">Upload Now
+                    </button>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+<div class="modal fade" id="export" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+           Export Data
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'share:upload' %}" method="POST" enctype="multipart/form-data">
+              <div class="text-center ">
+                <p>Dear <strong style="color: brown;"> {{ user.get_full_name }}</strong>  <br>
+                    We are still working on this part (Export functionality) <br>
+                    ------------------- <br>
+                    <strong> (C) 2020 Atlais Team </strong> <br>
+
+                    ------------------- 
+              </div>
+            
+            </p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button disabled type="submit" class="btn btn-success btn-sm">Export Now
                     </button>
                 </div>
         </div>

@@ -132,7 +132,7 @@
 
 
         {% if user.is_superuser %}
-
+<!-- 
         <li class="nav-header">Configuration</li>
 
         <li class="nav-item has-treeview">
@@ -141,7 +141,6 @@
             <p>
               Brand
               <i class="fas fa-angle-left right"></i>
-              <!-- <span class="badge badge-info right">11</span> -->
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -168,7 +167,6 @@
             <p>
               Settings
               <i class="fas fa-angle-left right"></i>
-              <!-- <span class="badge badge-info right">11</span> -->
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -199,7 +197,7 @@
             </li>
 
           </ul>
-        </li>
+        </li> -->
         {% endif %}
 
         {% if pe or perms.share or perms.loan or perms.balance %}
@@ -288,7 +286,11 @@
         </li>
         {% endif %}
 
-        <!-- <li class="nav-item">
+
+<!-- -------------------------------------------------------------- -->
+{% if perms.report.view_report %}
+
+        <li class="nav-item">
           <a href="{% url 'report:index' %}" class="nav-link ">
             <i class="nav-icon fa fa-bullhorn"></i>
             <p>
@@ -296,7 +298,10 @@
               <span class="right badge badge-primary">New</span>
             </p>
           </a>
-        </li> -->
+        </li>
+        {% endif %}
+
+<!-- -------------------------------------------------------------- -->
 
         {% if perms.balance %}
 

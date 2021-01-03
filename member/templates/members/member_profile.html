@@ -1,5 +1,7 @@
 {% extends 'admin_layouts/administrator.html'%}
-{% load static %}
+{% load static%}
+{% load humanize%}
+{% load base%}
 {% block content %}
 <div class="container py-5">
 
@@ -9,46 +11,142 @@
         <div class="widget-user-image">
           <img class="img-circle elevation-2" src="{{member.user.profile.profile.url}}" alt="User Avatar">
         </div>
-        <h3 class="widget-user-username">{{ member.user.get_full_name }}</h3>
+        <h3 class="widget-user-username">{{ member.user.first_name }}
+          {% if member.user.profile.sirname %}
+          {{ member.user.profile.sirname }}
+          {%endif %}
+          {{ member.user.last_name }}
+        </h3>
         <h5 class="widget-user-desc">Tegemeo Member</h5>
       </div>
       <div class="card-footer p-0">
         <ul class="nav flex-column">
-          <!-- <li class="nav-item p-2 ml-2 text-muted">
-            Share(Hisa) <span class="float-right badge bg-primary">3 | TZS 90000/=</span>
-          </li>
-          <li class="nav-item p-2 ml-2 text-muted">
-            Loans <span class="float-right badge bg-info">3 | TZS 90000/=</span>
-          </li>
-          
-          <li class="nav-item p-2 ml-2 text-muted">
-              Jamii <span class="float-right badge bg-primary">TZS 10000/=</span>
-          </li> -->
+    
           <table class="table m-2 p-2">
             <thead>
               <th>Category</th>
               <th>Count</th>
-              <th>Amount</th>
+              <th>Record</th>
             </thead>
             <tbody>
               <tr>
+                {% share_count member as m %}
                 <td>Share(Hisa)</td>
-                <td><span class=" badge bg-primary">3</span></td>
-                <td><strong>TZS 90000/=</strong></td>
+                <td>
+                  {%if m%}
+                  <span class=" badge bg-primary"> {{ m}} </span>
+                  {% else %}
+                  <span class=" badge bg-danger"> {{ m }} </span>
+                  {% endif %}
+
+                </td>
+
+                {% widthratio m 1 30000 as share_total %}
+                <td><strong>TZS {{ share_total|intcomma }}/=</strong></td>
               </tr>
               <tr>
                 <td>Loans</td>
-                <td><span class=" badge bg-primary">3</span></td>
-                <td><strong>TZS 90000/=</strong></td>
+                <td>
+                  {%if member.loan.all %}
+                  <span class=" badge bg-primary"> {{ member.loan.all.count }} </span>
+                  {% else %}
+                  <span class=" badge bg-danger"> {{ member.loan.all.count }} </span>
+                  {% endif %}
+                </td>
+                <td> <button {%if not member.loan.all %} disabled {% endif %} data-toggle="modal" data-target="#loans"
+                    onclick=" location.href='#' " class="btn btn-sm btn-primary"><i class="fa fa-eye"></i> View
+                    {%if member.loan.all %} {{ member.loan.all.count }} {% endif %} Loans summary</button> </td>
               </tr>
               <tr>
+                {% jamii_count member as j %}
                 <td>Jamii</td>
-                <td><span class=" badge bg-primary">3</span></td>
-                <td><strong>TZS 90000/=</strong></td>
+                <td>
+                  {%if j %}
+                  <span class=" badge bg-primary">{% widthratio j 5000 1 %}</span>
+                  {% else %}
+                  <span class=" badge bg-danger">{% widthratio j 5000 1 %}</span>
+                  {% endif %}
+
+                </td>
+                <td><strong>TZS {{ j|intcomma }}/=</strong></td>
               </tr>
             </tbody>
           </table>
-         
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="modal fade" id="loans" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5><strong>{{ member.user.get_full_name|title }} </strong> Loans summary</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'share:upload' %}" method="POST" enctype="multipart/form-data">
+                    <div class="text-center">
+                      <table class="table">
+                        <thead style="color: rgb(6, 87, 141);">
+                          <th>#</th>
+                          <th>Loan(TZS)</th>
+                          <th>Return(TZS)</th>
+                          <th>Paid(TZS)</th>
+                          <th><i class="fa fa-clock"></i></th>
+                          <th>Paid(%)</th>
+                        </thead>
+                        <tbody>
+                          {% for loan in member.loan.all %}
+                          <tr>
+                            <td><strong> {{ forloop.counter }}</strong></td>
+                            <td><strong> {{ loan.amount|intcomma }}</strong></td>
+                            <td><strong>{{ loan.return_amount|intcomma }}</strong></td>
+                            <td><strong>{{ loan.paid|intcomma }}</strong></td>
+                            <td><strong>4ds </strong></td>
+                            <td><strong>{{ loan.percent|floatformat:2 }}%</strong></td>
+                          </tr>
+                          {% endfor %}
+
+
+                        </tbody>
+                      </table>
+                      <br>
+                     <div>
+                        <ul class="list-group">
+                        <li class="list-group-item active text-center">Summary Format</li>
+                        <li class="list-group-item">All payment are recorded in Tanzanian Shillings( <strong>TZS</strong>
+                          )</li>
+                        <li class="list-group-item"><i class="fa fa-clock"></i> is time remained measured in days(
+                          <strong>ds i.e 2ds,3ds</strong> )</li>
+                      </ul>
+                     </div>
+                    </div>
+                   
+
+                    </p>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                      <button disabled type="submit" class="btn btn-success btn-sm">More Info
+                      </button>
+                    </div>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
         </ul>
       </div>
     </div>
@@ -92,7 +190,8 @@
                   <div class="info-box-content">
                     <span class="info-box-text text-center text-muted">Member Sponsor</span>
                     <span class="info-box-number text-center text-muted mb-0">Jane Admin <span>
-                      </span></span></div>
+                      </span></span>
+                  </div>
                 </div>
               </div>
               <div class="col-12 col-sm-4">
@@ -100,7 +199,8 @@
                   <div class="info-box-content">
                     <span class="info-box-text text-center text-muted">Member Since </span>
                     <span class="info-box-number text-center text-muted mb-0">Dec 12,2020 <span>
-                      </span></span></div>
+                      </span></span>
+                  </div>
                 </div>
               </div>
               <div class="col-12 col-sm-4">
@@ -108,7 +208,8 @@
                   <div class="info-box-content">
                     <span class="info-box-text text-center text-muted">Loans Status</span>
                     <span class="info-box-number text-center text-muted mb-0">Valid <span>
-                      </span></span></div>
+                      </span></span>
+                  </div>
                 </div>
               </div>
               <div class="col-12 col-sm-4">

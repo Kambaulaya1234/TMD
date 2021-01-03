@@ -67,10 +67,32 @@ def share_amount(context):
     return _t
 
 
+# ---------------------------------------------------------
+@register.simple_tag(name='jamii_count')
+def jamii_count(member):
+    if member is not None:
+        h = Share.objects.filter(member=member).aggregate(
+            total=Sum('jamii'))['total']
+        if h is None:
+            _hisa = 0
+        else:
+            _hisa = h
+
+    else:
+        _hisa = 0
+    return _hisa
+
+
 @register.simple_tag(name='share_count')
 def share_count(member):
     if member is not None:
-        _hisa = Share.objects.filter(member=member).count()
+        h = Share.objects.filter(member=member).aggregate(
+            total=Sum('hisa'))['total']
+        if h is None:
+            _hisa = 0
+        else:
+            _hisa = h
+
     else:
         _hisa = 0
     return _hisa
@@ -91,6 +113,17 @@ def jamii_amount(context):
     _t = ['total']
     if _jamii['total'] is not None:
         _t = int(_jamii['total'])
+    else:
+        _t = 0
+    return _t
+
+
+@register.simple_tag(name='interest_amount', takes_context=True)
+def interest_amount(context):
+    _interest = Loan.objects.aggregate(total=Sum('profit_amount'))
+    _t = ['total']
+    if _interest['total'] is not None:
+        _t = int(_interest['total'])
     else:
         _t = 0
     return _t

@@ -11,7 +11,10 @@ urlpatterns = [
     path('create/', CreateMemberView.as_view(), name='create'),
     path('upload-member/',ImportMemberView.as_view(), name='upload'),
     path('profile/<int:id>',MemberProfileView.as_view(), name='profile'),
+    path('fines/<int:id>',MemberFinesView.as_view(), name='fine'),
     path('delete/<int:id>/', RemoveView.as_view(), name='delete'),
-    path('edit/<int:id>/', EditMemberView.as_view(), name='edit')
+    path('delete/all', RemoveAll.as_view(), name='delete_all'),
+    path('edit/<int:id>/', EditMemberView.as_view(), name='edit'),
+    path('download/', Download.as_view(), name='download'),
 
 ]

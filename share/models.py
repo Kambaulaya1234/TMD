@@ -98,3 +98,36 @@ class Share(models.Model):
 
     def delete(self):
         return reverse('share:delete', kwargs={'id': self.id})
+
+
+FILE_FORMAT_CHOICES = [
+    ('excel', 'Excel Type'),
+    ('csv', 'CSV Type')
+]
+
+
+class Fine(models.Model):
+    member = models.ForeignKey(
+        Member, on_delete=models.CASCADE, related_name='fines')
+    hisa_amount = models.FloatField(blank=True, null=True, default=0)
+    jamii_amount = models.FloatField(blank=True, null=True, default=0)
+    week = models.ForeignKey(
+        WeekModel, on_delete=models.CASCADE, related_name='fines')
+
+    def __str__(self):
+        return f"{self.member} | {self.week}"
+
+    @property
+    def fine_sum(self):
+        return self.hisa_amount+self.jamii_amount
+
+
+# class ShareFile(models.Model):
+#     file_format = models.CharField(max_length=100,choices=FILE_FORMAT_CHOICES)
+#     file = models.FileField(upload_to='uploaded')
+
+#     def __str__(self):
+#         return f"{self.file}"
+
+#     class Admin:
+#         list_display = ['file_format', 'file']

@@ -35,6 +35,15 @@
                         <i class="fa fa-folder-open"></i>
                         Import From File
                     </a>
+
+                    <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#export">
+                        <i class="fa  fas  fa-file-excel"></i>
+                        Export Member</a>
+                    {% endif %}
+                    {% if perms.member.delete_member %}
+                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAll">
+                        <i class="fa fa-file-excel-o"></i> Delete All
+                    </a>
                     {% endif %}
 
 
@@ -50,11 +59,14 @@
             <table class="table table-striped projects">
                 <thead>
                     <tr>
-                        <th style="width: 1%">
+                        <!-- <th style="width: 1%">
                             #
+                        </th> -->
+                        <th style="width: 1%">
+                            REG
                         </th>
                         <th>
-                            Username
+                            Full Name
                         </th>
                         <th>
                             Profile
@@ -84,13 +96,16 @@
                 <tbody>
                     {% for member in members %}
                     <tr>
-                        <td>
+                        <!-- <td>
                             {{ forloop.counter }}
+                        </td> -->
+                        <td>
+                            <strong style="color: rgb(26, 82, 24);">{{ member.user|upper }}</strong> 
                         </td>
                         <td>
                             <a>
-                                <!-- {{ member.user.get_full_name }} -->
-                                <strong>{{ member.user.username|title }}</strong>
+                                <!-- -->
+                                <strong>{{ member.user.get_full_name }} </strong>
                             </a>
                             <br>
 
@@ -104,11 +119,11 @@
                             </ul>
                         </td>
                         <td>
-                            <strong>{{ member.user.first_name }}</strong>
+                            <strong>{{ member.user.first_name|title }}</strong>
 
                         </td>
                         <td>
-                            <strong> {{ member.user.last_name }}</strong>
+                            <strong> {{ member.user.last_name|title }}</strong>
 
                         </td>
                         <td class="text-center">
@@ -145,11 +160,22 @@
                             {% endif %}
                             {% if perms.loan.add_loan%}
 
+                            {% if member.fine_count > 0 %}
+                            <a class="btn btn-warning btn-sm" href="{% url 'member:fine' member.id  %}" title="Pay fine"
+                            >
+                            <i class="fa  fa-crosshairs">
+                            </i>
+                        </a>
+                            {% else %}
                             <a class="btn btn-success btn-sm" href="#" title="Pay Loan" data-toggle='modal'
-                                data-target="#loan{{ member.id }}">
-                                <i class="fa fa-align-center">
-                                </i>
-                            </a>
+                            data-target="#loan{{ member.id }}">
+                            <i class="fa fa-align-center">
+                            </i>
+                        </a>
+                            {% endif %}
+
+                           
+                           
                             {% endif %}
                             {% if perms.member.delete_member%}
                             <a class="btn btn-danger btn-sm" href="#" data-toggle='modal'
@@ -213,8 +239,8 @@
                                             <div class="form-group">
                                                 <label for="username">Username <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" name="username" id="username"
-                                                    class="form-control" required placeholder="Enter first name"
+                                                <input type="text" name="username" id="username" class="form-control"
+                                                    required placeholder="Enter first name"
                                                     value="{{ member.user.username }}">
                                             </div>
                                             <div class="form-group">
@@ -288,7 +314,14 @@
                                         <ul class="list-group">
                                             <li class="list-group-item">Member:
                                                 <strong>{{ member.user }} <span style="color: brown;">(ulitoa mkopo kwa
-                                                        {{ member.user }} ?)</span></strong></li><br>
+                                                        {{ member.user }} ?)</span></strong></li>
+                                            <li class="list-group-item">
+                                                <input class="form-control" type="number" name="round" id="amount"
+                                                    placeholder="Enter Loan Round 1,2,3,4.." required>
+                                            </li>
+                                                        
+                                                        
+                                                        <br>
                                             <div class="form-group">
                                                 <label for="amount">How Much (TZS)? <span style="color: brown;">(Kiwango
                                                         cha pesa)</span></label>
@@ -296,11 +329,18 @@
                                                     placeholder="Enter Loan Amount" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="deadline">When did {{ member.user|title }} assigned
+                                                <label for="start">When did {{ member.user|title }} assigned
                                                     Loan? <span style="color: brown;">(umempa lini mkopo
                                                         ?)</span></label>
-                                                <input class="form-control" type="date" name="start" id="deadline"
-                                                    placeholder="Enter Deadline Amount" required>
+                                                <input class="form-control" type="date" name="start" id="start"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="deadline">
+                                                    Deadline? <span style="color: brown;">(Atarudisha lini mkopo
+                                                        ?)</span></label>
+                                                <input class="form-control" type="date" name="deadline" id="deadline"
+                                                    required>
                                             </div>
                                             </li>
 
@@ -323,6 +363,75 @@
 
 
 
+
+
+
+
+
+
+
+
+
+                    
+                    <!-- Create Modal -->
+                    <div class="modal fade" id="PayFine{{ member.id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Activate member
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- {{ member.delete }} -->
+                                    <form action="{{ member.activate }}" method="POST">
+                                        {% csrf_token %}
+                                        <p>You about to activate Access to Member<strong style="color: red;">
+                                                {{ member.user|title }}
+                                            </strong></p>
+                                        <ul class="list-group">
+                                            {% for share in member.share.all %}
+                                            <li class="list-group-item">Fine: Tsh
+                                                <strong>{{ share.fine_amount }}/=</strong>
+                                            </li>
+                                            <input type="hidden" name="week_id" value="{{ share.week.id }}">
+                                            <input type="hidden" name="year_id" value="{{ share.year.id }}">
+                                            <li class="list-group-item">week: <strong>{{ share.week }}</strong></li>
+                                            <li class="list-group-item">From: <strong>{{ share.created_at }}</strong>
+                                            </li>
+                                            {% endfor %}
+                                            <li class="list-group-item">Jamii
+                                                <strong>TZS 5000/=</strong>
+                                            </li>
+                                            <li class="list-group-item">Activated by You
+                                                (<strong>{{ user.get_full_name }}</strong>)</li>
+                                        </ul>
+                                        <br>
+                                        <input class="form-control" type="number" name="hisa"
+                                            placeholder="Enter Share(Hisa)">
+
+                                        <!-- <input class="form-control" type="password" name="password"
+                                            placeholder="Re-enter Your Password"> -->
+
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Yes? Activate Member
+                                            </button>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end Modal -->
+
+
+
+
                     {% endfor %}
 
                 </tbody>
@@ -333,6 +442,37 @@
     <!-- /.card -->
 
 
+
+
+    <div class="modal fade" id="deleteAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete All Member
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'member:delete_all' %}">
+    
+                    <p>Are Your Sure? <strong style="color: red;"> Delete All {{ members.count }}
+                        Member</strong>?
+                    </p>
+    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete All
+                        </button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+  
+    
 
 
 
@@ -442,5 +582,39 @@
             </form>
         </div>
     </div>
+</div>
+
+
+
+<div class="modal fade" id="export" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+           Export Data
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'share:upload' %}" method="POST" enctype="multipart/form-data">
+              <div class="text-center ">
+                <p>Dear <strong style="color: brown;"> {{ user.get_full_name }}</strong>  <br>
+                    We are still working on this part (Export functionality) <br>
+                    ------------------- <br>
+                    <strong> (C) 2020 Atlais Team </strong> <br>
+                    ------------------- 
+              </div>
+            
+            </p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button disabled type="submit" class="btn btn-success btn-sm">Export Now
+                    </button>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
 </div>
 {% endblock %}

@@ -9,13 +9,17 @@ class Member(models.Model):
         User, on_delete=models.CASCADE, related_name='member', unique=True)
     is_member = models.BooleanField(default=False)
     has_fine = models.BooleanField(default=False, blank=True, null=True)
+    fine_count= models.IntegerField(default=0, blank=True, null=True)
+    sponsored_by=models.OneToOneField(
+       User, on_delete=models.CASCADE, related_name='sponsor',blank=True, null=True)
+    is_member = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'members'
-        ordering = ['-id']
+        ordering = ['id']
 
     def __str__(self):
-        return f'{self.user}'
+        return f'{self.user.username} | {self.user.get_full_name() }'
 
     def edit(self):
         return reverse('member:edit', kwargs={'id': self.id})

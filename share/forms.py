@@ -5,18 +5,19 @@ from django.conf import settings
 from django.contrib.auth.models import User
 # User=settings.AUTH_USER_MODEL
 
+
 class CreateShareForm(forms.ModelForm):
     member = forms.ModelChoiceField(
-        queryset=Member.objects.filter(is_member=True,has_fine=False), empty_label='-----Select Member----', widget=forms.Select(
-        attrs={
-            'class': 'form-control',
-            'style': 'border-radius: 20px',
-        }
-    ))
+        queryset=Member.objects.filter(is_member=True, has_fine=False), empty_label='-----Select Member----', widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-radius: 20px',
+            }
+        ))
 
     class Meta:
         model = Share
-        exclude = ['created_at','fine']
+        exclude = ['created_at', 'fine']
         widgets = {
             'week': forms.Select(
                 attrs={
@@ -73,3 +74,22 @@ class CreateShareForm(forms.ModelForm):
             ),
 
         }
+
+
+# class UploadFileForm(forms.ModelForm):
+#     class Meta:
+#         model = ShareFile
+#         fields = '__all__'
+
+#     widgets = {
+#         'file_format': forms.Select(
+#         attrs={
+#             "class": "form-control",
+#         }
+#     ),
+#         'file_format': forms.FileInput(
+#         attrs={
+#             "class": "form-control",
+#         }
+#     ),
+#     }

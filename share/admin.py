@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import (YearModel, MonthModel, WeekModel, Share)
+from .models import (YearModel, MonthModel, WeekModel, Share,Fine)
 # Register your models here.
 admin.site.register(YearModel)
 admin.site.register(MonthModel)
 admin.site.register(Share)
+admin.site.register(Fine)
 
 
 @admin.register(WeekModel)

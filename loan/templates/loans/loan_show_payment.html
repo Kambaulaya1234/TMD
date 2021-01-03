@@ -1,6 +1,7 @@
 {% extends 'admin_layouts/administrator.html'%} {% load static %}
 {% block title%} Loan | TMD {% endblock%}
 {% block content %}
+{% load humanize %}
 
 <section class="content-header">
   <div class="container-fluid">
@@ -28,7 +29,7 @@
             <div class="user-block">
               <img class="img-circle img-bordered-sm" src="{{ loan.member.user.profile.profile.url }}" alt=".">
               <span class="username">
-                <a href="#">{{ loan.member|title }} Loan</a>
+                <a href="#">{{ loan.member|upper }} Loan</a>
               </span>
               <span class="description">Loan since {{ loan.created_at }}</span>
             </div>
@@ -48,7 +49,19 @@
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"><strong>Loan Amount</strong></span>
                   <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
-                    {{ loan.amount }}/=</span>
+                    {{ loan.amount|intcomma }}
+
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-3">
+              <div class="info-box bg-light">
+                <div class="info-box-content">
+                  <span class="info-box-text text-center text-muted"><strong>Cash Amount</strong></span>
+                  <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
+                    {{ loan.total|intcomma }}/=
+                  </span>
                 </div>
               </div>
             </div>
@@ -57,7 +70,8 @@
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"> <strong>Return Amount</strong></span>
                   <span class="info-box-number text-center mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
-                    {{ loan.total }}/=</span>
+                    {{ loan.return_amount|intcomma }}/=
+                  </span>
                 </div>
               </div>
             </div>
@@ -66,17 +80,17 @@
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"><Strong>Total Paid Amount</Strong></span>
                   <span class="info-box-number text-center  mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
-                    {{ loan.paid }}/=<span>
+                    {{ loan.paid|intcomma }}/=<span>
                     </span></span></div>
               </div>
             </div>
-            {% if loan.remained_amount != loan.total %}
-            <div class="col-12 col-sm-3">
+            {% if loan.remained_amount != loan.return_amount %}
+            <div class="col-12 col-sm-12">
               <div class="info-box bg-light">
                 <div class="info-box-content">
                   <span class="info-box-text text-center text-muted"><Strong>Total Remained Amount</Strong></span>
                   <span class="info-box-number text-center  mb-0" style="color: rgba(3, 74, 228, 0.836);">TZS
-                    {{ loan.remained_amount }}/=<span>
+                    {{ loan.remained_amount|intcomma }}/=<span>
                     </span></span></div>
               </div>
             </div>
@@ -110,7 +124,7 @@
                   <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ single.ref_code }}</td>
-                    <td>{{ single.paid }}</td>
+                    <td>{{ single.paid|intcomma }}</td>
                     <td>{{ single.date }}</td>
                     <td>{{ single.by.get_full_name }}</td>
                     <td>
@@ -143,14 +157,14 @@
                             <div class="card card-danger">
                               <div class="card-header">
                                 <h6 class="card-title text-center">
-                                  <small>Do You wish to discount TZS {{ single.paid }}/= from Loan paid?</small></h6>
+                                  <small>Do You wish to remove TZS {{ single.paid }}/= from Loan paid?</small></h6>
                               </div>
                               <div class="card-body">
                                 <div class="col-8">
                                   <div class="icheck-primary">
-                                      <input type="checkbox" id="remember" name="discount" value="1">
+                                      <input checked type="checkbox" id="remember" name="discount" value="1">
                                       <label for="remember">
-                                          Yes? Discount from paid Loan
+                                          Yes? Remove from paid Loan
                                       </label>
                                   </div>
                               </div>

@@ -1,12 +1,12 @@
 {% extends 'admin_layouts/administrator.html'%} {% load static %}
-{% block title%} share | TMD {% endblock%}
+{% block title%} Loans | TMD {% endblock%}
 {% block content %}
 {% load humanize %}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Loans</h1>
+                <h1>Loans </h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -17,15 +17,26 @@
         </div>
     </div><!-- /.container-fluid -->
 </section>
-{% if Loans %}
+{% for roundObject in rounds %}
+
 <section class="content">
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
             <div class="row justify-content-between">
-                <h3 class="card-title"> Loan List</h3>
+                <h3 class="card-title"> ROUND {{ roundObject.name }}| {{ loans.count }} Active Loan List</h3>
+                <div class="float-right">
+                    <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload">
+                        <i class="fa fa-folder-open"></i>
+                        Import From File
+                    </a>
+                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAll">
+                        <i class="fa fa-trash"></i> Delete All
+                    </a>
+                </div>
             </div>
         </div>
+        {% if roundObject.loans.all %}
         <div class="card-body p-0">
             <table class="table table-striped ">
                 <thead>
@@ -34,19 +45,22 @@
                             #
                         </th>
                         <th>
+                            REG
+                        </th>
+                        <th>
                             Name
                         </th>
                         <th>
                             Loan
                         </th>
                         <th>
-                            Profit
+                            Profit(10%)
                         </th>
                         <th>
-                            Insurance
+                            BIMA(1%)
                         </th>
                         <th>
-                            Amount
+                            Return
                         </th>
                         <th>
                             Paid
@@ -57,30 +71,36 @@
                         <th>
                             Deadline
                         </th>
-                        <th>
+                        <th width="8%">
                             Status
                         </th>
 
-                        <th class="text-center">
+                        <th class="text-center" width="12%">
                             Actions
                         </th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    {% for loan in Loans %}
+                    {% for loan in roundObject.loans.all %}
                     <tr>
                         <td>
-                            {{ forloop.counter }}
+                            <strong>{{ forloop.counter }}</strong>
+
+                        </td>
+                        <td>
+                            <strong>{{ loan.member.user.username|upper }}</strong>
+
                         </td>
                         <td>
                             <a>
-                                <strong>{{ loan.member|title }}</strong>
+                                <strong>{{ loan.member.user.get_full_name|upper }}</strong>
                             </a>
                             <br>
                         </td>
                         <td>
                             {{ loan.amount|intword|intcomma }}
+
                         </td>
                         <td>
                             {{ loan.profit_amount|intword|intcomma }}
@@ -89,7 +109,7 @@
                             {{ loan.insurance|intword|intcomma }}
                         </td>
                         <td>
-                            {{ loan.total|intword|intcomma }}
+                            {{ loan.return_amount|intword|intcomma }}
                         </td>
                         <td>
                             {{ loan.paid|intword|intcomma }}
@@ -101,124 +121,245 @@
                             {{ loan.deadline }}
                         </td>
                         <td class="project_progress">
-                            {% if  loan.percent > 0.0 and loan.percent < 100 %}
-                            <div class="progress progress-sm">
+                            {% if loan.percent > 0.0 and loan.percent < 100 %} <div class="progress progress-sm">
                                 <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57"
                                     aria-volumemin="0" aria-volumemax="100"
                                     style="width: {{ loan.percent|floatformat:0 }}% ">
                                 </div>
-                            </div>
-                            <small>
-                                <small>{{ loan.percent|floatformat:1 }}% Complete</small>
-                            </small>
-                            {% elif loan.total  == loan.paid %}
-                            <span class="badge badge-success">Completed</span>
-                            {% else %}
-                            <span class="badge badge-danger">Incomplete</span>
+        </div>
+        <small>
+            <small>{{ loan.percent|floatformat:2 }}% Complete</small>
+        </small>
+        {% elif loan.return_amount == loan.paid %}
+        <span class="badge badge-success">Completed</span>
+        {% else %}
+        <span class="badge badge-danger">Incomplete</span>
+        {% endif %}
+        </td>
 
-                            {% endif %}
-                        </td>
 
+        <td class="text-center">
+            <a class="btn btn-primary btn-sm" href="{{ loan.show }}" title="View Details">
+                <i class="fas fa-eye">
+                </i>
+            </a>
+            {% if not loan.return_amount == loan.paid %}
+            <a class="btn btn-success btn-sm" href="#" data-toggle='modal' title="Pay Loan"
+                data-target="#payLoan{{ loan.id }}">
+                <i class="fa fa-anchor">
+                </i>
+            </a>
+            {% else %}
+            <button disabled class="btn btn-secondary btn-sm" title="No action" href="">
+                <i class="fa fa-anchor">
+                </i>
+            </button>
+            {% endif %}
 
-                        <td class="text-center">
-                            <a class="btn btn-primary btn-sm" href="{{ loan.show }}" title="View Details">
-                                <i class="fas fa-eye">
-                                </i>
-                            </a>
-                            {% if not loan.total  == loan.paid  %}
-                            <a class="btn btn-success btn-sm" href="#" data-toggle='modal' title="Pay Loan"
-                                data-target="#payLoan{{ loan.id }}">
-                                <i class="fa fa-anchor">
-                                </i>
-                            </a>
-                            {% else %}
-                            <button disabled class="btn btn-secondary btn-sm" title="No action" href="">
-                                <i class="fa fa-anchor">
-                                </i>
-                            </button>
-                            {% endif %}
+            <a class="btn btn-danger btn-sm" href="#" data-toggle='modal' title="Remove Loan"
+                data-target="#deleteLoan{{ loan.id }}">
+                <i class="fas fa-trash">
+                </i>
+            </a>
 
-                            <a class="btn btn-danger btn-sm" href="#" data-toggle='modal' title="Remove Loan"
-                                data-target="#deleteLoan{{ loan.id }}">
-                                <i class="fas fa-trash">
-                                </i>
-                            </a>
+        </td>
+        </tr>
 
-                        </td>
-                    </tr>
+        <div class="modal fade" id="deleteLoan{{ loan.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Delete Share
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ loan.delete }}">
+                            {% csrf_token %}
+                            <p>Are Your Sure? Delete <strong style="color: red;">{{ loan.member|title }}
+                                    Loan</strong>?</p>
 
-                    <div class="modal fade" id="deleteLoan{{ loan.id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                Delete Share
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Loan
                                 </button>
                             </div>
-                            <div class="modal-body">
-                                <form action="{{ loan.delete }}">
-                                    {% csrf_token %}
-                                    <p>Are Your Sure? Delete <strong style="color: red;">{{ loan.member|title }}
-                                            Loan</strong>?</p>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm"
-                                            data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Loan
-                                        </button>
-                                    </div>
-                            </div>
-                            </form>
-                        </div>
                     </div>
+                    </form>
                 </div>
-                    <div class="modal fade" id="payLoan{{ loan.id }}" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    Loan Payment
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{ loan.payloan }}" method="POST">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <label for="paid">How Much did <strong>{{ loan.member|title }}</strong> paid
-                                                ?</label>
-                                            <input type="text" class="form-control" name="paid" id="paid"
-                                                placeholder="Enter Paid Amount" required>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary btn-sm"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success btn-sm">Yes? Pay Loan
-                                            </button>
-                                        </div>
-                                </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-
-                </tbody>
-            </table>
+            </div>
         </div>
+        <div class="modal fade" id="payLoan{{ loan.id }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Loan Payment
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ loan.payloan }}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="paid">How Much did <strong>{{ loan.member|title }}</strong> paid
+                                    ?</label>
+                                <input type="text" class="form-control" name="paid" id="paid"
+                                    placeholder="Enter Paid Amount" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paid">When? (Date)</label>
+                                <input type="date" class="form-control" name="paid_date" id="paid"
+                                    placeholder="Enter Paid date" required>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success btn-sm">Yes? Pay Loan
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        </tbody>
+        </table>
+    </div>
     </div>
 
 </section>
+
+
+
+
+<div class="modal fade" id="deleteAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete All Loans
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'loan:delete_all' %}">
+
+                    <p>Are Your Sure? <strong style="color: red;"> Delete All {{ loans.count }}
+                            Loans</strong>?
+                    </p>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete All
+                        </button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 {% else %}
 <div class="jumbotron text-center">
     <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
-        <h6>No Loan Found</h6>
+
+        <h6>ROUND {{ roundObject.name }} No Loans Found</h6>
+        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload">
+            <i class="fa fa-folder-open"></i>
+            Import From File
+        </a>
     </div>
 </div>
 {% endif %}
 
+
+<div class="card-footer">
+    <nav aria-label="Contacts Page Navigation">
+        <ul class="pagination justify-content-center m-0">
+            {% if rounds.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ rounds.previous_page_number }}">
+                    <i class="fa fa-angle-double-left"></i></a></li>
+            {% endif %}
+
+            {% for pg in rounds.paginator.page_range%}
+            {% if rounds.number == pg %}
+            <li class="page-item active"><a class="page-link" href="?page={{pg}}" class="">{{ pg }}</a></li>
+            {% else %}
+            {% if pg < rounds.number|add:2 %} <li class="page-item "><a class="page-link" href="?page={{pg}}">
+                    {{ pg }}</a></li>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% if rounds.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ rounds.next_page_number }}"><i
+                            class="fa fa-angle-double-right"></i></a></li>
+                {% else %}
+                {% endif %}
+        </ul>
+    </nav>
+</div>
+
+
+
+{% empty %}
+<div class="jumbotron text-center">
+    <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
+
+        <h6> No Rounds Found</h6>
+        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload">
+            <i class="fa fa-folder-open"></i>
+            Import From File
+        </a>
+    </div>
+</div>
+{% endfor %}
+
+
+
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Import Panel
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'loan:upload' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">Choose Format</label>
+                        <select name="choice" class="form-control">
+                            <option value="0" disabled>---choose format---</option>
+                            <option value="1" selected>Excel(.xlsx)</option>
+                            <option value="2" disabled class="text-muted">CSV</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="import">Choose File</label><br>
+                        <input required type="file" name="file" class="btn btn-primary btn-sm form-control" id="import">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success btn-sm">Upload Now
+                        </button>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

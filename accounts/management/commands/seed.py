@@ -17,7 +17,8 @@ class Command(BaseCommand):
     # def success(self, *args, **options):
 
     def handle(self, *args, **options):
-        admin_password='directoratlaz'
+        admin_password = 'directoratlaz'
+        tegemeo_password = 'tegemeo'
         User.objects.all().delete()
         Profile.objects.all().delete()
         management.call_command('flush')
@@ -28,7 +29,11 @@ class Command(BaseCommand):
             # ============================================Normal Account====================================================
 
             {'first_name': 'Cuthbert', 'last_name': 'Cornel', 'username': 'admin', 'email': 'atlaz.director@gmail.com', 'password': f'{admin_password}',
-             'is_superuser': True, 'date_joined': f'{ timezone.now() }'},
+             'is_superuser': True, 'is_staff': True,'date_joined': f'{ timezone.now() }'},
+
+            # ============================================Business Account====================================================
+            {'first_name': 'Tegemeo', 'last_name': 'Admin', 'username': 'tegemeo', 'email': 'director@gmail.com', 'password': f'{tegemeo_password}',
+             'date_joined': f'{ timezone.now() }'},
         ]
 
         self.stdout.write(self.style.SUCCESS('\n'))
@@ -45,15 +50,20 @@ class Command(BaseCommand):
                 if user.username == 'admin':
                     self.stdout.write(self.style.SUCCESS(
                         f"| ------>user {user.username } passcode: '{admin_password}'' seeded  successfully! "))
-                # self.stdout.write(self.style.SUCCESS(f'| ------>profile for {profile.user } created successfully! ' ))
+                if user.username == 'admin':
+                    Group.objects.all().delete()
+                    groupAdministrator, status = Group.objects.get_or_create(
+                        name='administrator')
+                    perms = Permission.objects.all()
+                    groupAdministrator.permissions.set(perms)
+                    user.groups.add(groupAdministrator)
+
+                if user.username == 'tegemeo':
+                    groupAdministrator, status = Group.objects.get_or_create(
+                        name='tegemeo')
+
             except User.DoesNotExist:
                 raise CommandError('Error creating User')
-        if user.username == 'admin':
-            Group.objects.all().delete()
-            groupAdministrator = Group.objects.create(name='administrator')
-            perms = Permission.objects.all()
-            groupAdministrator.permissions.set(perms)
-            user.groups.add(groupAdministrator)
 
         self.stdout.write(self.style.SUCCESS('\n'))
         self.stdout.write(self.style.SUCCESS(
