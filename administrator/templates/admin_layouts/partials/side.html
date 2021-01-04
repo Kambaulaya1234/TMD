@@ -1,7 +1,7 @@
 {% load static %}
 {% load base %}
 <aside class=" main-sidebar elevation-4 sidebar-light-primary">
-  <a href="{% url 'administrator:index' %}" class="brand-link navbar-white">
+  <a href="{% url 'administrator:start' %}" class="brand-link navbar-white">
     <img src="{% static 'administrator/dist/img/atlais.png' %}" alt="." class="brand-image " style="opacity: .8" width="10px">
     <!-- <span class="brand-text font-weight-light">The Atlais</span> -->
   </a>
@@ -15,8 +15,18 @@
     </div>
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item has-treeview ">
-          <a href="#" class="nav-link active">
+        <li class="nav-item has-treeview
+        {% if request.resolver_match.url_name == 'start' %}
+        menu-open
+          {% endif %}
+        
+        ">
+          <a href="#" class="nav-link 
+          {% if request.resolver_match.url_name == 'start' %}
+         active
+            {% endif %}
+          
+          ">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
@@ -26,15 +36,15 @@
           <ul class="nav nav-treeview">
             <!-- {% if perms.auth.view_user or perms.loan.view_loan or perms.member.view_member %}
             <li class="nav-item">
-              <a href="{% url 'administrator:index' %}" class="nav-link">
+              <a href="{% url 'administrator:start' %}" class="nav-link">
                 <i class="nav-icon far fa-circle text-primary"></i>
                 <p class="text">Admin Dashboard</p>
               </a>
             </li>
             {% endif %} -->
             <li class="nav-item">
-              <a href="{% url 'administrator:index' %}" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
+              <a href="{% url 'administrator:start' %}" class="nav-link">
+                <i class="nav-icon far fa-circle "></i>
                 <p class="text">Admin Dashboard</p>
               </a>
             </li>
@@ -57,8 +67,18 @@
 
         {% if perms.auth.view_group %}
 
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link ">
+        
+        <li class="nav-item has-treeview
+        {% if 'active-group' in request.path %}
+        menu-open
+          {% endif %}
+        
+        ">
+          <a href="#" class="nav-link 
+          {% if 'active-group' in request.path %}
+          active
+          {% endif %}
+          ">
             <i class="nav-icon fab fa-rebel"></i>
             <p>
               Orbit
@@ -80,8 +100,19 @@
 
 
         {% if perms.auth.view_user %}
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
+        <li class="nav-item has-treeview
+        {% if 'active-user' in request.path %}
+        menu-open
+          {% endif %}
+        
+        ">
+          <a href="#" class="nav-link
+          {% if 'active-user' in request.path %}
+        active
+          {% endif %}
+          
+          
+          ">
             <i class="nav-icon fa  fa-fighter-jet "></i>
             <p>
               Supervisors
@@ -103,8 +134,17 @@
 
         {% if perms.member.view_member %}
 
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
+        <li class="nav-item has-treeview
+        {% if 'members' in request.path %}
+        menu-open
+          {% endif %}
+        
+        ">
+          <a href="#" class="nav-link
+          {% if 'members' in request.path %}
+        active
+            {% endif %}
+          ">
             <i class="nav-icon fa fa-users"></i>
             <p>
               Members
@@ -115,13 +155,24 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="{% url 'member:index' %}" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
+                <i class="nav-icon far fa-circle
+                
+                {% if 'members/active' in request.path %}
+                text-primary
+                    {% endif %}
+                
+                "></i>
                 <p class="text">Active Member</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="{% url 'member:inactive' %}" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
+                <i class="nav-icon far fa-circle 
+                {% if 'members/inactive' in request.path %}
+                text-primary
+                    {% endif %}
+                
+                "></i>
                 <p class="text">Inactive Member</p>
               </a>
             </li>
@@ -204,8 +255,15 @@
         <li class="nav-header">Management </li>
         {% endif %}
         {% if perms.share %}
-        <li class="nav-item has-treeview">
-          <a href="#" class="nav-link">
+        <li class="nav-item has-treeview
+        {% if 'shares' in request.path %}
+        menu-open
+          {% endif %}">
+          <a href="#" class="nav-link
+          {% if 'shares' in request.path %}
+         active
+            {% endif %}
+          ">
             <i class="nav-icon fa  fa-bars"></i>
             <p>
               Share(Hisa)
@@ -254,8 +312,15 @@
 
         {% if perms.loan %}
 
-        <li class="nav-item has-treeview">
-          <a href="" class="nav-link">
+        <li class="nav-item has-treeview
+        {% if 'loans' in request.path %}
+        menu-open
+          {% endif %}">
+          <a href="" class="nav-link
+          
+          {% if 'loans' in request.path %}
+          active
+            {% endif %}">
             <i class="nav-icon fa fa-align-center"></i>
             <p>
               Loan Information
@@ -268,13 +333,23 @@
 
             <li class="nav-item">
               <a href="{% url 'loan:index' %}" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
+                <i class="nav-icon far fa-circle 
+                {% if 'loans/active' in request.path %}
+                text-primary
+          {% endif %}
+                
+                "></i>
                 <p class="text">Loan list</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="{% url 'loan:complete' %}" class="nav-link">
-                <i class="nav-icon far fa-circle text-primary"></i>
+                <i class="nav-icon far fa-circle 
+                {% if 'loans/complete' in request.path %}
+                text-primary
+          {% endif %}
+                
+                "></i>
                 <p class="text">paid Loans</p>
               </a>
             </li>
@@ -291,7 +366,13 @@
 {% if perms.report.view_report %}
 
         <li class="nav-item">
-          <a href="{% url 'report:index' %}" class="nav-link ">
+          <a href="{% url 'report:index' %}" class="nav-link
+          
+          {% if 'report' in request.path %}
+          active
+            {% endif %}
+          
+          ">
             <i class="nav-icon fa fa-bullhorn"></i>
             <p>
               Reports
@@ -306,7 +387,13 @@
         {% if perms.balance %}
 
         <li class="nav-item">
-          <a href="{% url 'balance:index' %}" class="nav-link ">
+          <a href="{% url 'balance:index' %}" class="nav-link 
+          
+          {% if 'balance' in request.path %}
+          active
+            {% endif %}
+          
+          ">
             <i class="nav-icon fa  fa-briefcase"></i>
             <p>
               Balance

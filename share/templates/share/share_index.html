@@ -185,7 +185,7 @@ aria-hidden="true">
 <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            Delete All Share
+            Delete Shares
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -196,10 +196,16 @@ aria-hidden="true">
                 <p>Are Your Sure? <strong style="color: red;"> Delete All {{ week.share.all.count }}
                     Share</strong>?
                 </p>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                            <input type="checkbox" id="markRound" name="weekName" value="{{ week.name}}" >
+                            <label for="markRound" style="color: red;"> Only {{ week.name }}</label>
+                    </li>
+                  </ul>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger btn-sm">Yes? Delete All Share
+                    <button type="submit" class="btn btn-danger btn-sm">Yes? Delete Share
                     </button>
                 </div>
         </div>

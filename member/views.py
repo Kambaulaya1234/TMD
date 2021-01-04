@@ -1,3 +1,4 @@
+from loan.models import LoanRound
 from django.http import HttpResponse, Http404, StreamingHttpResponse
 from django.http import FileResponse
 import os
@@ -55,7 +56,7 @@ class InactiveIndexView(View):
         }
         return render(request, template_name, context)
 
-from loan.models import LoanRound
+
 class BaseObject:
     def get_object(self, id):
         member = Member.objects.filter(id=id)
@@ -126,7 +127,7 @@ class EditMemberView(View, BaseObject):
                 messages.success(self.request, 'member updated successfully!')
         return redirect('member:index')
 
-from loan.models import LoanRound
+
 class PayLoanView(View, BaseObject):
     def post(self, *args, **kwargs):
         member = self.get_object(kwargs['id'])[0]
@@ -134,9 +135,9 @@ class PayLoanView(View, BaseObject):
         start = self.request.POST['start']
         deadline = self.request.POST['deadline']
         loanRound = self.request.POST['round']
-        loanRoundOBJ,status=LoanRound.objects.get_or_create(name=loanRound)
+        loanRoundOBJ, status = LoanRound.objects.get_or_create(name=loanRound)
         Loan.objects.create(member=member, amount=amount,
-                            deadline=deadline, created_at=start,loan_round=loanRoundOBJ)
+                            deadline=deadline, created_at=start, loan_round=loanRoundOBJ)
         messages.success(
             self.request, f'member {member.user} assigned loan  successfully!')
         return redirect('loan:index')
@@ -238,10 +239,11 @@ class MemberProfileView(View, BaseObject):
             'member': _member,
         }
         return render(self.request, self.template_name, context)
-    
-    
+
+
 class MemberFinesView(View, BaseObject):
     template_name = 'members/member_fine.html'
+
     def get(self, *args, **kwargs):
         MEMBER_ID = kwargs.get('id')
         _member = self.get_object(MEMBER_ID)[0]
@@ -271,7 +273,6 @@ class Download(View):
                 response['Content-Type'] = 'application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 response[
                     'Content-Disposition'] = f'attachment; filename={_name}'
-
                 return response
         raise Http404
 

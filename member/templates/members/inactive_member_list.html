@@ -107,8 +107,8 @@
                         <td class="text-center">
                             {% if perms.member.change_member%}
 
-                            <a class="btn btn-warning btn-sm" href="#" data-toggle='modal'
-                                data-target="#deleteShare{{ member.id }}">
+                            <a class="btn btn-warning btn-sm" href="{% url 'member:fine' member.id  %}"
+                                >
                                 <i class="fas fa-key">
                                 </i>
                             </a>

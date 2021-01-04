@@ -3,7 +3,7 @@ from .views import *
 
 app_name = 'share'
 urlpatterns = [
-    path('', IndexView.as_view(), name='index'),
+    path('active', IndexView.as_view(), name='index'),
     path('delete/<int:id>/', RemoveView.as_view(), name='delete'),
     path('delete/all', RemoveAll.as_view(), name='delete_all'),
     path('upload', HandleUploadedFileView.as_view(), name='upload'),

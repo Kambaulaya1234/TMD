@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Share, WeekModel, MonthModel, YearModel,Fine
+from .models import Share, WeekModel, MonthModel, YearModel, Fine
 from .forms import CreateShareForm
 from django.contrib import messages
 from django import forms
@@ -81,11 +81,15 @@ class RemoveView(View, BaseObject):
 
 class RemoveAll(View, BaseObject):
     def get(self, *args, **kwargs):
-        self.get_all().delete()
-        WeekModel.objects.all().delete()
-        MonthModel.objects.all().delete()
-        YearModel.objects.all().delete()
-        messages.success(self.request, 'all Share deleted successfully!')
+        _this_week_name = self.request.GET.get('weekName')
+        print(_this_week_name)
+        if _this_week_name is None:
+            WeekModel.objects.all().delete()
+            messages.success(self.request, 'all Share deleted successfully!')
+        else:
+            WeekModel.objects.filter(name=_this_week_name).delete()
+            messages.success(
+                self.request, f'{_this_week_name} Share deleted successfully!')
         return redirect('share:index')
 
 
@@ -240,13 +244,16 @@ class HandleUploadedFileView(View):
                 else:
                     _share.member.fine_count += 1
                     if _share.hisa < 0 and _share.jamii < 5000:
-                        Fine.objects.create(member=_share.member,hisa_amount=10000,jamii_amount=10000,week=_share.week)
-                    elif  _share.hisa < 0:
-                        Fine.objects.create(member=_share.member,hisa_amount=10000,jamii_amount=0,week=_share.week)
-                        
-                    elif  _share.jamii < 5000:
-                        Fine.objects.create(member=_share.member,hisa_amount=0,jamii_amount=10000,week=_share.week)
-                        
+                        Fine.objects.create(
+                            member=_share.member, hisa_amount=10000, jamii_amount=10000, week=_share.week)
+                    elif _share.hisa < 0:
+                        Fine.objects.create(
+                            member=_share.member, hisa_amount=10000, jamii_amount=0, week=_share.week)
+
+                    elif _share.jamii < 5000:
+                        Fine.objects.create(
+                            member=_share.member, hisa_amount=0, jamii_amount=10000, week=_share.week)
+
                     _share.member.save()
 
             return (member_entry, True)

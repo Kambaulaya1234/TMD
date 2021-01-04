@@ -12,7 +12,7 @@ from django.db.models import Avg, Sum
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         template_name = 'loans/loan_index.html'
-        # loans = Loan.objects.filter(status=False).order_by('-created_at')
+        loans = Loan.objects.filter(status=False).order_by('-created_at')
         rounds = LoanRound.objects.order_by('-date')
         paginator = Paginator(rounds, 1)
         page = request.GET.get('page')
@@ -26,12 +26,12 @@ class IndexView(View):
 class CompleteLoanListView(View):
     def get(self, request, *args, **kwargs):
         template_name = 'loans/loan_complete_index.html'
-        loans = Loan.objects.filter(status=True).order_by('-created_at')
-        paginator = Paginator(loans, 10)
+        rounds = LoanRound.objects.order_by('-date')
+        paginator = Paginator(rounds, 1)
         page = request.GET.get('page')
         filterItems = paginator.get_page(page)
         context = {
-            'Loans': filterItems,
+            'rounds': filterItems,
         }
         return render(request, template_name, context)
 
@@ -48,7 +48,7 @@ class BaseObject:
         _payment = Payment.objects.create(
             loan=loan, paid=paid, by=user, date=paid_date)
         if _payment.paid == 0:
-            Payment.objects.filter(loan=loan).delete()
+            _payment.delete()
         return _payment
 
     def round_col(self, x):
@@ -62,7 +62,6 @@ class BaseObject:
 
         if _before['total'] < paid_now and paid_now > 0:
             _net = float(paid_now) - float(_before['total'])
-            print(f'--------------------net {_net}')
             self.create_loan_payment(loan=loan, paid=float(_net),
                                      user=self.request.user, paid_date=date_paid)
 
@@ -79,16 +78,15 @@ class LoanProgressPaymentView(View, BaseObject):
         loan = self.get_object(kwargs['id'])[0]
         _paid = self.request.POST['paid']
         _paid_date = self.request.POST['paid_date']
-        print(_paid_date)
-        if loan.paid <= (loan.amount):
+        if loan.paid <= (loan.return_amount):
             if float(_paid) <= (loan.return_amount - loan.paid):
                 loan.paid += float(_paid)
                 self.create_loan_payment(
                     loan, _paid, self.request.user, _paid_date)
                 loan.save()
-                if loan.paid == loan.amount:
+                if loan.paid == loan.return_amount:
                     loan.status = True
-                    loan.paid = (loan.profit_amount+loan.insurance)
+                    loan.paid = loan.return_amount
                     loan.save()
                 messages.success(
                     self.request, f'TZS {_paid}/= paid to {loan.member.user.get_full_name() } loan  successfully!')
@@ -131,8 +129,13 @@ class RemovePaymentView(View, BaseObject):
 
 class RemoveAll(View, BaseObject):
     def get(self, *args, **kwargs):
-        LoanRound.objects.all().delete()
-        messages.success(self.request, 'all Rounds  deleted successfully!')
+        _round=self.request.GET.get('round')
+        if _round is None:
+            LoanRound.objects.all().delete()
+            messages.success(self.request, 'all Rounds  deleted successfully!')
+        else:
+            LoanRound.objects.filter(name=_round).delete()
+            messages.success(self.request, f'all Round {_round}  deleted successfully!')
         return redirect('loan:index')
 
 

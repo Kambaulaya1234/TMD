@@ -14,7 +14,7 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'Login successfully!')
-            return redirect('administrator:index')
+            return redirect('administrator:start')
         else:
             messages.error(request, 'invalid credentials')
             return redirect('login')
@@ -49,13 +49,13 @@ def register(request):
                         my_status = 'Mr'
                         Profile.objects.create(
                             user_id=request.user.id, profile='images/users/default/he.png', status=my_status)
-                        return redirect('administrator:index')
+                        return redirect('administrator:start')
 
                     elif gender == '2':
                         my_status = 'Miss'
                         Profile.objects.create(
                             user_id=request.user.id, profile='images/users/default/she.png', status=my_status)
-                        return redirect('administrator:index')
+                        return redirect('administrator:start')
 
         else:
             messages.error(request, "Password doesn't match")

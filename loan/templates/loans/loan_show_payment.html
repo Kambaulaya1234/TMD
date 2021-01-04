@@ -39,6 +39,25 @@
     </div>
 
 
+    {% if loan.percent > 0.0 and loan.percent < 100 %} <div class="progress">
+     
+        <div class="progress-bar " role="progressbar" style="width: {{ loan.percent|floatformat:0 }}%;" aria-valuenow="{{ loan.percent|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100">
+          {{ loan.percent|floatformat:0 }}% </div>
+
+      </div>
+      <small class="text-center" style="text-transform: uppercase;color:rgba(0, 97, 243, 0.801)">
+      <strong>      {{ loan.percent|floatformat:0 }}% Payment Completed</strong>
+      </small>
+      {% endif %}
+
+
+
+
+
+
+
+
+
 
     <div class="card-body" style="display: block;">
       <div class="row justify">

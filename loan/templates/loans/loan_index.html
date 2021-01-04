@@ -25,15 +25,19 @@
         <div class="card-header">
             <div class="row justify-content-between">
                 <h3 class="card-title"> ROUND {{ roundObject.name }}| {{ loans.count }} Active Loan List</h3>
+        {% if roundObject.loans.all %}
+              
                 <div class="float-right">
                     <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload">
                         <i class="fa fa-folder-open"></i>
                         Import From File
                     </a>
+
                     <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAll">
                         <i class="fa fa-trash"></i> Delete All
                     </a>
                 </div>
+                {% endif %}
             </div>
         </div>
         {% if roundObject.loans.all %}
@@ -83,8 +87,11 @@
                 </thead>
                 <tbody>
                     {% for loan in roundObject.loans.all %}
+
+                    {% if not loan.return_amount == loan.paid %}
                     <tr>
                         <td>
+
                             <strong>{{ forloop.counter }}</strong>
 
                         </td>
@@ -126,16 +133,16 @@
                                     aria-volumemin="0" aria-volumemax="100"
                                     style="width: {{ loan.percent|floatformat:0 }}% ">
                                 </div>
-        </div>
-        <small>
-            <small>{{ loan.percent|floatformat:2 }}% Complete</small>
-        </small>
-        {% elif loan.return_amount == loan.paid %}
-        <span class="badge badge-success">Completed</span>
-        {% else %}
-        <span class="badge badge-danger">Incomplete</span>
-        {% endif %}
-        </td>
+                                </div>
+                                <small>
+                                    <small>{{ loan.percent|floatformat:2 }}% Complete</small>
+                                </small>
+                                {% elif loan.return_amount == loan.paid %}
+                                <span class="badge badge-success">Completed</span>
+                                {% else %}
+                                <span class="badge badge-danger">Incomplete</span>
+                                {% endif %}
+                        </td>
 
 
         <td class="text-center">
@@ -228,6 +235,13 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+
+
+       
+    
+
+
         {% endfor %}
 
         </tbody>
@@ -240,37 +254,10 @@
 
 
 
-<div class="modal fade" id="deleteAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delete All Loans
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{% url 'loan:delete_all' %}">
-
-                    <p>Are Your Sure? <strong style="color: red;"> Delete All {{ loans.count }}
-                            Loans</strong>?
-                    </p>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger btn-sm">Yes? Delete All
-                        </button>
-                    </div>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 
 
 {% else %}
+
 <div class="jumbotron text-center">
     <div class="text-center" style="border-radius:50px;padding:20px;color:rgb(245, 24, 24)">
 
@@ -279,10 +266,52 @@
             <i class="fa fa-folder-open"></i>
             Import From File
         </a>
+        
+        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteAll">
+            <i class="fa fa-trash"></i> Delete Round {{ roundObject.name }}
+        </a>
     </div>
 </div>
+
+
+
 {% endif %}
 
+<div class="modal fade" id="deleteAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            Delete Loans
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'loan:delete_all' %}">
+
+                <p>Are Your Sure? <strong style="color: red;"> Delete All {{ loans.count }}
+                        Loans</strong>?
+                </p>
+              
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                            <input type="checkbox" id="markRound" name="round" value="{{ roundObject.name }}" >
+                            <label for="markRound" style="color: red;"> Only Round {{ roundObject.name }}</label>
+                    </li>
+                  </ul>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Yes? Delete
+                    </button>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+</div>
 
 <div class="card-footer">
     <nav aria-label="Contacts Page Navigation">
