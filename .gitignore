@@ -1,7 +1,7 @@
 /venv
 /__pycache__
 /media
-static
+# static
 .vscode
 venv
 __pycache__/
