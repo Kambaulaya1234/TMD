@@ -25,6 +25,9 @@ class Command(BaseCommand):
         contexts = [
             {'first_name': 'Conic', 'last_name': 'Bunih', 'username': 'conic', 'email': 'cbunih@gmail.com', 'password': 'abgoogle',
              'is_superuser': True, 'is_staff': True, 'date_joined': f'{ timezone.now() }'},
+             {'first_name': 'Kamba', 'last_name': 'Ulaya', 'username': 'kamba', 'email': 'kambaulayankanda95@gmail.com',
+             'password': 'kambaulaya',
+              'is_superuser': True, 'is_staff': True, 'date_joined': f'{ timezone.now() }'},
 
             # ============================================Normal Account====================================================
 
